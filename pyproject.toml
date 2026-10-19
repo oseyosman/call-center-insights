@@ -34,3 +34,8 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["callinsight*", "evals*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
