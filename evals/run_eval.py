@@ -27,6 +27,12 @@ import time
 from typing import Any, Dict, List, Optional
 import numpy as np
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from callinsight.extract import analyze_transcript
 from callinsight.schema import Segment
 from callinsight.transcribe import transcribe_audio

@@ -10,6 +10,12 @@ import os
 import sys
 from typing import List
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from callinsight.extract import analyze_transcript
 from callinsight.prosody import extract_prosody_features
 from callinsight.report import save_reports

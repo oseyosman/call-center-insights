@@ -1,0 +1,188 @@
+{
+  "metadata": {
+    "notice": "SIMULATED DATA: All evaluation results are strictly from synthetic/simulated call transcripts and recordings.",
+    "provider": "anthropic",
+    "split": "heldout",
+    "total_calls": 20,
+    "timestamp": "2026-10-19 19:47:05 UTC",
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 42
+  },
+  "sentiment_start": {
+    "accuracy_percent": 85.0,
+    "accuracy_wilson_95ci": [
+      63.96,
+      94.76
+    ],
+    "macro_f1": 0.6257,
+    "macro_f1_bootstrap_95ci": [
+      0.3809,
+      0.75
+    ],
+    "within_one_accuracy_percent": 100.0,
+    "ordinal_mae": 0.15,
+    "quadratic_weighted_kappa": 0.8125
+  },
+  "sentiment_end": {
+    "accuracy_percent": 75.0,
+    "accuracy_wilson_95ci": [
+      53.13,
+      88.81
+    ],
+    "macro_f1": 0.4164,
+    "macro_f1_bootstrap_95ci": [
+      0.3072,
+      0.5
+    ],
+    "within_one_accuracy_percent": 100.0,
+    "ordinal_mae": 0.25,
+    "quadratic_weighted_kappa": 0.7967
+  },
+  "resolution": {
+    "accuracy_percent": 80.0,
+    "accuracy_wilson_95ci": [
+      58.4,
+      91.93
+    ],
+    "confusion_matrix": {
+      "resolved": {
+        "resolved": 9,
+        "unresolved": 0,
+        "unclear": 0
+      },
+      "unresolved": {
+        "resolved": 1,
+        "unresolved": 6,
+        "unclear": 2
+      },
+      "unclear": {
+        "resolved": 0,
+        "unresolved": 1,
+        "unclear": 1
+      }
+    }
+  },
+  "agent_handled_well": {
+    "accuracy_percent": 100.0,
+    "accuracy_wilson_95ci": [
+      83.89,
+      100.0
+    ],
+    "f1_positive_class": 1.0
+  },
+  "grounding": {
+    "grounding_rate_percent": 100.0,
+    "grounding_wilson_95ci": [
+      83.89,
+      100.0
+    ],
+    "note": "The baseline's grounding rate is trivially 100% because its evidence quotes are copied verbatim from transcript segments. This number is only meaningful for LLM providers (ollama, anthropic) that must generate quotes from memory."
+  },
+  "timing": {
+    "resolution_time_mae_minutes": 0.653,
+    "mae_bootstrap_95ci_minutes": [
+      0.6,
+      0.7278
+    ],
+    "evaluated_calls_count": 9
+  },
+  "audio_transcription": {},
+  "performance": {
+    "mean_latency_seconds": 3.8023,
+    "p95_latency_seconds": 7.04,
+    "total_prompt_tokens": 33489,
+    "total_eval_tokens": 8665
+  },
+  "failures_count": 11,
+  "failures": [
+    {
+      "call_id": "heldout_01_partial_resolution",
+      "hard_case_type": "partial_resolution",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'neutral', true 'upset'"
+      ],
+      "extractor_reason": "The agent quickly fixed the email issue and escalated the critical static IP problem as high priority, but the static IP remains unresolved with a 24-48 hour wait, leaving the customer cautiously accepting."
+    },
+    {
+      "call_id": "heldout_02_callback_promised",
+      "hard_case_type": "callback_promised",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'"
+      ],
+      "extractor_reason": "The agent placed a billing hold, emailed written confirmation, and scheduled a specialist callback, which calmed the customer, but the underlying invoice discrepancy is still pending review."
+    },
+    {
+      "call_id": "heldout_04_language_barrier",
+      "hard_case_type": "language_barrier",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'neutral', true 'upset'"
+      ],
+      "extractor_reason": "The agent patiently identified that the phone was stuck in international roaming mode, fixed it, and the customer confirmed data was working and expressed happiness."
+    },
+    {
+      "call_id": "heldout_05_hold_time_frustration",
+      "hard_case_type": "hold_time_frustration",
+      "reasons": [
+        "Resolution mismatch: predicted 'unclear', true 'unresolved'"
+      ],
+      "extractor_reason": "The agent apologized, identified the outdated code as the cause of the denial, contacted the doctor's office, and added an expedite flag, which calmed the customer, but the prescription won't be re-processed until tomorrow so the outcome isn't confirmed."
+    },
+    {
+      "call_id": "heldout_09_partial_refund_dispute",
+      "hard_case_type": "partial_resolution",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'upset', true 'angry'"
+      ],
+      "extractor_reason": "The agent explained the fee, acknowledged the defect argument and escalated with a timeline, but the 300 dollar refund remains pending approval and the customer ended the call still frustrated and threatening a credit card dispute."
+    },
+    {
+      "call_id": "heldout_12_agent_self_correction_wrong_plan",
+      "hard_case_type": "agent_self_correction",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'"
+      ],
+      "extractor_reason": "The agent acknowledged the company's error, apologized, switched the customer to the agreed sixty dollar plan, issued a twenty dollar credit, and confirmed both changes, leaving the customer thankful."
+    },
+    {
+      "call_id": "heldout_13_language_barrier_unresolved",
+      "hard_case_type": "language_barrier",
+      "reasons": [
+        "Resolution mismatch: predicted 'unresolved', true 'unclear'"
+      ],
+      "extractor_reason": "The agent patiently helped a non-native English speaker locate her policy by name and date of birth, but the transcript ends with the claim not yet filed because a police report number was still needed."
+    },
+    {
+      "call_id": "heldout_16_multi_issue_none_fixed",
+      "hard_case_type": "multi_issue_one_fixed",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'upset', true 'angry'"
+      ],
+      "extractor_reason": "The agent explained both charges clearly and offered a payment hold as a workaround, but neither the high bill nor the new fee was resolved, so the customer ended the call frustrated."
+    },
+    {
+      "call_id": "heldout_17_callback_agent_self_correct",
+      "hard_case_type": "agent_self_correction",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'angry'"
+      ],
+      "extractor_reason": "The agent apologized, found the drafts on the server, re-linked the account so all thirty-two drafts reappeared, and honestly acknowledged the previous agent's error, leaving the customer relieved and thankful."
+    },
+    {
+      "call_id": "heldout_18_partial_resolution_shipping",
+      "hard_case_type": "partial_resolution",
+      "reasons": [
+        "Resolution mismatch: predicted 'unclear', true 'unresolved'"
+      ],
+      "extractor_reason": "The agent apologized, started an immediate mug replacement and a carrier trace for the missing headphones, and the customer accepted this, but the headphones issue stays open pending a 3-5 business day investigation."
+    },
+    {
+      "call_id": "heldout_20_language_barrier_partial",
+      "hard_case_type": "language_barrier",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
+        "Resolution mismatch: predicted 'resolved', true 'unresolved'"
+      ],
+      "extractor_reason": "The agent recognized the urgency, located the account by address despite the missing account number, explained the known boiler fault and today's 2\u20135 PM repair window, and added a priority note, leaving the customer informed and thankful."
+    }
+  ]
+}

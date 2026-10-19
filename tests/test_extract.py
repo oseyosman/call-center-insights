@@ -229,3 +229,46 @@ def test_ollama_retry_on_invalid_json():
         assert mock_post.call_count == 2
         assert extraction.resolution == "resolved"
         assert meta["tokens"]["eval_count"] == 40
+
+
+# ---------------------------------------------------------------------------
+# Anthropic extractor & retry (Bug 7)
+# ---------------------------------------------------------------------------
+
+def test_anthropic_extractor_success():
+    extractor = AnthropicExtractor(api_key="test-key-mock")
+
+    mock_tool_block = MagicMock()
+    mock_tool_block.type = "tool_use"
+    mock_tool_block.name = "record_call_insights"
+    mock_tool_block.id = "tool_123"
+    mock_tool_block.input = {
+        "customer_sentiment_start": "upset",
+        "customer_sentiment_end": "satisfied",
+        "agent_handled_well": True,
+        "resolution": "resolved",
+        "reason": "Agent solved the issue quickly.",
+        "evidence": [{"quote": "All fixed now", "timestamp": 10.0}]
+    }
+
+    mock_resp = MagicMock()
+    mock_resp.content = [mock_tool_block]
+    mock_resp.usage.input_tokens = 100
+    mock_resp.usage.output_tokens = 50
+
+    with patch("anthropic.Anthropic") as mock_anthropic_cls:
+        mock_client = MagicMock()
+        mock_anthropic_cls.return_value = mock_client
+        mock_client.messages.create.return_value = mock_resp
+
+        segments = [Segment(start=0.0, end=12.0, speaker="customer", text="All fixed now")]
+        extraction, meta = extractor.extract(segments)
+
+        assert extraction.resolution == "resolved"
+        assert extraction.agent_handled_well is True
+        assert meta["tokens"]["input_tokens"] == 100
+        # Check messages.create kwargs: temperature must not be present
+        call_kwargs = mock_client.messages.create.call_args.kwargs
+        assert "temperature" not in call_kwargs
+        assert call_kwargs["max_tokens"] == 1024
+

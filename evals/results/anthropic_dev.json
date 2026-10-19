@@ -1,0 +1,182 @@
+{
+  "metadata": {
+    "notice": "SIMULATED DATA: All evaluation results are strictly from synthetic/simulated call transcripts and recordings.",
+    "provider": "anthropic",
+    "split": "dev",
+    "total_calls": 20,
+    "timestamp": "2026-10-19 19:44:39 UTC",
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 42
+  },
+  "sentiment_start": {
+    "accuracy_percent": 85.0,
+    "accuracy_wilson_95ci": [
+      63.96,
+      94.76
+    ],
+    "macro_f1": 0.8651,
+    "macro_f1_bootstrap_95ci": [
+      0.4874,
+      1.0
+    ],
+    "within_one_accuracy_percent": 100.0,
+    "ordinal_mae": 0.15,
+    "quadratic_weighted_kappa": 0.8958
+  },
+  "sentiment_end": {
+    "accuracy_percent": 85.0,
+    "accuracy_wilson_95ci": [
+      63.96,
+      94.76
+    ],
+    "macro_f1": 0.6756,
+    "macro_f1_bootstrap_95ci": [
+      0.5654,
+      0.75
+    ],
+    "within_one_accuracy_percent": 100.0,
+    "ordinal_mae": 0.15,
+    "quadratic_weighted_kappa": 0.9462
+  },
+  "resolution": {
+    "accuracy_percent": 85.0,
+    "accuracy_wilson_95ci": [
+      63.96,
+      94.76
+    ],
+    "confusion_matrix": {
+      "resolved": {
+        "resolved": 10,
+        "unresolved": 0,
+        "unclear": 0
+      },
+      "unresolved": {
+        "resolved": 0,
+        "unresolved": 7,
+        "unclear": 1
+      },
+      "unclear": {
+        "resolved": 0,
+        "unresolved": 2,
+        "unclear": 0
+      }
+    }
+  },
+  "agent_handled_well": {
+    "accuracy_percent": 80.0,
+    "accuracy_wilson_95ci": [
+      58.4,
+      91.93
+    ],
+    "f1_positive_class": 0.8824
+  },
+  "grounding": {
+    "grounding_rate_percent": 100.0,
+    "grounding_wilson_95ci": [
+      83.89,
+      100.0
+    ],
+    "note": "The baseline's grounding rate is trivially 100% because its evidence quotes are copied verbatim from transcript segments. This number is only meaningful for LLM providers (ollama, anthropic) that must generate quotes from memory."
+  },
+  "timing": {
+    "resolution_time_mae_minutes": 0.258,
+    "mae_bootstrap_95ci_minutes": [
+      0.154,
+      0.36
+    ],
+    "evaluated_calls_count": 10
+  },
+  "audio_transcription": {},
+  "performance": {
+    "mean_latency_seconds": 3.3519,
+    "p95_latency_seconds": 4.4841,
+    "total_prompt_tokens": 29855,
+    "total_eval_tokens": 8152
+  },
+  "failures_count": 10,
+  "failures": [
+    {
+      "call_id": "dev_02_polite_but_unresolved",
+      "hard_case_type": "polite_but_unresolved",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'"
+      ],
+      "extractor_reason": "The agent checked the policy, apologized, and courteously explained that the expired coupon couldn't be extended, so the request went unfulfilled but the customer accepted it graciously and ended the call on a positive note."
+    },
+    {
+      "call_id": "dev_04_sarcasm",
+      "hard_case_type": "sarcasm",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'angry'"
+      ],
+      "extractor_reason": "The customer began sarcastic and upset over an update crash, and the agent apologized, identified the version, and rolled back to 4.1, restoring the server, though the customer ended with lingering sarcasm and a warning."
+    },
+    {
+      "call_id": "dev_06_thanks_no_fix",
+      "hard_case_type": "thanks_no_fix",
+      "reasons": [
+        "agent_handled_well mismatch: predicted False, true True"
+      ],
+      "extractor_reason": "The agent checked the account and gave a clear answer, but the fee waiver was denied and the agent didn't offer alternatives or try to retain the customer, who then said they'd cancel the card."
+    },
+    {
+      "call_id": "dev_07_escalation_to_supervisor",
+      "hard_case_type": "escalation_to_supervisor",
+      "reasons": [
+        "agent_handled_well mismatch: predicted False, true True"
+      ],
+      "extractor_reason": "The agent did not acknowledge or apologize for the airline-initiated cancellation, quoted a $200 change fee right away, and only transferred to a supervisor queue, so the customer's anger grew and the rebooking was not resolved."
+    },
+    {
+      "call_id": "dev_08_rude_agent",
+      "hard_case_type": "rude_agent",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'neutral'"
+      ],
+      "extractor_reason": "The agent was rude and dismissive, offered no help or explanation beyond citing the throttling policy, and the customer ended the call angry and planning a formal complaint."
+    },
+    {
+      "call_id": "dev_10_unclear_connection_drop",
+      "hard_case_type": "call_dropped_unclear",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'upset', true 'neutral'",
+        "Resolution mismatch: predicted 'unresolved', true 'unclear'"
+      ],
+      "extractor_reason": "The call dropped due to poor signal before the caller could give the exact location of the sparking line, so the report was not completed, though the agent promptly asked for the cross street."
+    },
+    {
+      "call_id": "dev_12_warranty_claim_rejected",
+      "hard_case_type": "dispute_unresolved",
+      "reasons": [
+        "agent_handled_well mismatch: predicted False, true True"
+      ],
+      "extractor_reason": "The agent denied the warranty replacement due to a water ingress exclusion without explaining it or offering alternatives, so the customer's issue went unresolved and he ended the call angry."
+    },
+    {
+      "call_id": "dev_15_wrong_department",
+      "hard_case_type": "transfer_unresolved",
+      "reasons": [
+        "Resolution mismatch: predicted 'unclear', true 'unresolved'"
+      ],
+      "extractor_reason": "The agent quickly recognized the customer had reached the wrong department and transferred them to commercial lending, but the call ended before it could be confirmed that the customer's rate question was answered."
+    },
+    {
+      "call_id": "dev_16_disputed_charge_investigation",
+      "hard_case_type": "in_progress_unclear",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'upset', true 'neutral'",
+        "Resolution mismatch: predicted 'unresolved', true 'unclear'"
+      ],
+      "extractor_reason": "The agent promptly froze the card and opened a fraud investigation, but the customer's refund was not issued and was pending a five-business-day review, leaving the customer's question about same-day reimbursement unmet."
+    },
+    {
+      "call_id": "dev_18_system_outage_helpless",
+      "hard_case_type": "unresolved_outage",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'angry'",
+        "agent_handled_well mismatch: predicted False, true True"
+      ],
+      "extractor_reason": "The customer's production database remained down due to a regional outage, and the agent offered only a brief apology with no workaround, escalation, or ETA, so the customer's frustration grew."
+    }
+  ]
+}

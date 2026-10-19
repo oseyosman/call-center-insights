@@ -335,9 +335,8 @@ class AnthropicExtractor(BaseExtractor):
             return client.messages.create(
                 model=self.model,
                 max_tokens=1024,
-                temperature=0.0,
                 tools=[tool_schema],
-                tool_choice={"type": "tool", "name": "record_call_insights"},
+                tool_choice={"type": "auto"},
                 messages=msgs
             )
 

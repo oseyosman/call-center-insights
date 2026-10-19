@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "notice": "SIMULATED DATA: All evaluation results are strictly from synthetic/simulated call transcripts and recordings.",
+    "provider": "anthropic",
+    "split": "test",
+    "total_calls": 20,
+    "timestamp": "2026-10-19 19:45:48 UTC",
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 42
+  },
+  "sentiment_start": {
+    "accuracy_percent": 80.0,
+    "accuracy_wilson_95ci": [
+      58.4,
+      91.93
+    ],
+    "macro_f1": 0.7964,
+    "macro_f1_bootstrap_95ci": [
+      0.3757,
+      0.9444
+    ],
+    "within_one_accuracy_percent": 100.0,
+    "ordinal_mae": 0.2,
+    "quadratic_weighted_kappa": 0.8551
+  },
+  "sentiment_end": {
+    "accuracy_percent": 80.0,
+    "accuracy_wilson_95ci": [
+      58.4,
+      91.93
+    ],
+    "macro_f1": 0.7714,
+    "macro_f1_bootstrap_95ci": [
+      0.4629,
+      0.9407
+    ],
+    "within_one_accuracy_percent": 100.0,
+    "ordinal_mae": 0.2,
+    "quadratic_weighted_kappa": 0.9263
+  },
+  "resolution": {
+    "accuracy_percent": 80.0,
+    "accuracy_wilson_95ci": [
+      58.4,
+      91.93
+    ],
+    "confusion_matrix": {
+      "resolved": {
+        "resolved": 10,
+        "unresolved": 1,
+        "unclear": 0
+      },
+      "unresolved": {
+        "resolved": 2,
+        "unresolved": 5,
+        "unclear": 0
+      },
+      "unclear": {
+        "resolved": 0,
+        "unresolved": 1,
+        "unclear": 1
+      }
+    }
+  },
+  "agent_handled_well": {
+    "accuracy_percent": 90.0,
+    "accuracy_wilson_95ci": [
+      69.9,
+      97.21
+    ],
+    "f1_positive_class": 0.9444
+  },
+  "grounding": {
+    "grounding_rate_percent": 100.0,
+    "grounding_wilson_95ci": [
+      83.89,
+      100.0
+    ],
+    "note": "The baseline's grounding rate is trivially 100% because its evidence quotes are copied verbatim from transcript segments. This number is only meaningful for LLM providers (ollama, anthropic) that must generate quotes from memory."
+  },
+  "timing": {
+    "resolution_time_mae_minutes": 0.226,
+    "mae_bootstrap_95ci_minutes": [
+      0.142,
+      0.318
+    ],
+    "evaluated_calls_count": 10
+  },
+  "audio_transcription": {},
+  "performance": {
+    "mean_latency_seconds": 3.4462,
+    "p95_latency_seconds": 5.9386,
+    "total_prompt_tokens": 29991,
+    "total_eval_tokens": 8025
+  },
+  "failures_count": 11,
+  "failures": [
+    {
+      "call_id": "test_02_polite_but_unresolved",
+      "hard_case_type": "polite_but_unresolved",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'"
+      ],
+      "extractor_reason": "The customer's return was outside the 30-day window and could not be processed, but the agent politely explained the policy and the customer accepted it graciously."
+    },
+    {
+      "call_id": "test_03_resolved_still_angry",
+      "hard_case_type": "resolved_still_angry",
+      "reasons": [
+        "Resolution mismatch: predicted 'unresolved', true 'resolved'"
+      ],
+      "extractor_reason": "The agent quickly restored power and offered a $250 credit toward the $300 loss, but the customer stayed furious and said they would escalate to the state utility board."
+    },
+    {
+      "call_id": "test_04_sarcasm",
+      "hard_case_type": "sarcasm",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'angry'"
+      ],
+      "extractor_reason": "The agent apologized, diagnosed the issue, and restored all the deleted files from a snapshot, which resolved the problem even though the customer stayed a bit sarcastic."
+    },
+    {
+      "call_id": "test_05_interruptions",
+      "hard_case_type": "interruptions",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'angry', true 'upset'"
+      ],
+      "extractor_reason": "The agent stayed calm despite the customer's interruptions, rebooked them on an 11:15 AM United non-stop that met the noon deadline, and the customer thanked them."
+    },
+    {
+      "call_id": "test_06_thanks_no_fix",
+      "hard_case_type": "thanks_no_fix",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
+        "Resolution mismatch: predicted 'resolved', true 'unresolved'"
+      ],
+      "extractor_reason": "The agent clearly explained that cosmetic rock chips under one inch are not covered, and the customer thanked her and ended the call satisfied with the answer."
+    },
+    {
+      "call_id": "test_07_escalation_to_supervisor",
+      "hard_case_type": "escalation_to_supervisor",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'angry'",
+        "Sentiment end mismatch: predicted 'upset', true 'angry'"
+      ],
+      "extractor_reason": "The customer disputed a $300 pet-hair cleaning fee, the agent explained the branch's photo evidence and couldn't remove the fee, then transferred the call to a supervisor at the customer's request, leaving the dispute unresolved."
+    },
+    {
+      "call_id": "test_09_standard_refund_issued",
+      "hard_case_type": "routine_fix",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'neutral'"
+      ],
+      "extractor_reason": "The agent quickly identified the duplicate charge, voided it and issued an immediate refund, and the customer confirmed receipt of the refund email and thanked her."
+    },
+    {
+      "call_id": "test_10_call_dropped_unclear",
+      "hard_case_type": "call_dropped_unclear",
+      "reasons": [
+        "Resolution mismatch: predicted 'unresolved', true 'unclear'"
+      ],
+      "extractor_reason": "The customer reported a blown tire on highway 101 but the line dropped before the location was confirmed, and the agent responded appropriately by asking for the mile marker, so the issue remains unresolved."
+    },
+    {
+      "call_id": "test_12_denied_medical_authorization",
+      "hard_case_type": "dispute_unresolved",
+      "reasons": [
+        "agent_handled_well mismatch: predicted False, true True"
+      ],
+      "extractor_reason": "The customer's urgent MRI denial was not resolved, and the agent gave only a brief, rigid explanation without offering an expedited appeal, a way to submit the missing records, or other next steps, so the customer escalated to threatening a state complaint."
+    },
+    {
+      "call_id": "test_15_wrong_number_transfer",
+      "hard_case_type": "transfer_unresolved",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
+        "Resolution mismatch: predicted 'resolved', true 'unresolved'"
+      ],
+      "extractor_reason": "The customer dialed the wrong business, and the agent politely clarified the mistake and transferred the call to the pharmacy line, which the customer appreciated."
+    },
+    {
+      "call_id": "test_18_discontinued_product_parts",
+      "hard_case_type": "unresolved_outage",
+      "reasons": [
+        "agent_handled_well mismatch: predicted False, true True"
+      ],
+      "extractor_reason": "The customer's request for a carburetor diaphragm couldn't be fulfilled because the model is discontinued, and the agent gave no alternatives (aftermarket parts, referrals, or empathy) when the customer expressed frustration."
+    }
+  ]
+}

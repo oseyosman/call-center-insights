@@ -149,14 +149,21 @@ All numbers below were produced by running the commands in the **Quality Gate Co
 
 > ¹ Baseline grounding is trivially 100%: the baseline copies quotes from the transcript. Only meaningful for LLM providers.
 
+#### Anthropic Claude (`claude-sonnet-5-5`)
+
+| Split | Sent. Start Acc | Within-One | Sent. End Acc | Within-One | Resolution Acc | Agent Acc | Grounding | Res. Time MAE | Latency |
+|-------|-----------------|------------|---------------|------------|----------------|-----------|-----------|---------------|---------|
+| **Dev (20)** | **85.0%** [64.0%, 94.8%] | **100.0%** | **85.0%** [64.0%, 94.8%] | **100.0%** | **85.0%** [64.0%, 94.8%] | **80.0%** [58.4%, 91.9%] | **100.0%** [83.9%, 100%] | **0.258 min** [0.154, 0.360] | **3.35s** |
+| **Test (20)** | **80.0%** [58.4%, 91.9%] | **100.0%** | **80.0%** [58.4%, 91.9%] | **100.0%** | **80.0%** [58.4%, 91.9%] | **90.0%** [69.9%, 97.2%] | **100.0%** [83.9%, 100%] | **0.226 min** [0.142, 0.318] | **3.45s** |
+| **Heldout (20)** | **85.0%** [64.0%, 94.8%] | **100.0%** | **75.0%** [53.1%, 88.8%] | **100.0%** | **80.0%** [58.4%, 91.9%] | **100.0%** [83.9%, 100%] | **100.0%** [83.9%, 100%] | **0.653 min** [0.600, 0.728] | **3.80s** |
+
 #### Other Providers
 
-| Provider | Split | Sentiment Start | Sentiment End | Resolution | Agent Acc | Grounding | Res. Time MAE | Latency |
-|----------|-------|-----------------|---------------|------------|-----------|-----------|---------------|---------|
-| **Ollama (Local LLM)** | Dev / Test / Heldout | *Requires local Ollama daemon* | — | — | — | — | — | — |
-| **Anthropic Claude** | Dev / Test / Heldout | *Requires `ANTHROPIC_API_KEY`* | — | — | — | — | — | — |
+| Provider | Split | Status | Command |
+|----------|-------|--------|---------|
+| **Ollama (`llama3`)** | Dev / Test / Heldout | *Not run (requires local daemon)* | `bash scripts/run_provider_evals.sh` (after `ollama run llama3`) |
 
-To run provider evals: `bash scripts/run_provider_evals.sh`
+To re-run provider evals: `bash scripts/run_provider_evals.sh`
 
 ### Baseline Failure Modes (Why Weak Baselines Fail)
 1. **Sarcasm Blindness**: VADER scored sarcastic praise ("Oh fantastic, what a masterpiece of software design to wipe my data") as positive compound sentiment, predicting *satisfied* when the true sentiment was *angry*.

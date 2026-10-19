@@ -4,18 +4,46 @@
     "provider": "baseline",
     "split": "test",
     "total_calls": 20,
-    "timestamp": "2026-10-19 02:33:47 UTC"
+    "timestamp": "2026-10-19 19:29:47 UTC",
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 42
   },
   "sentiment_start": {
     "accuracy_percent": 45.0,
-    "macro_f1": 0.4181
+    "accuracy_wilson_95ci": [
+      25.82,
+      65.79
+    ],
+    "macro_f1": 0.4181,
+    "macro_f1_bootstrap_95ci": [
+      0.1923,
+      0.6342
+    ],
+    "within_one_accuracy_percent": 90.0,
+    "ordinal_mae": 0.7,
+    "quadratic_weighted_kappa": 0.4712
   },
   "sentiment_end": {
     "accuracy_percent": 55.0,
-    "macro_f1": 0.3738
+    "accuracy_wilson_95ci": [
+      34.21,
+      74.18
+    ],
+    "macro_f1": 0.3738,
+    "macro_f1_bootstrap_95ci": [
+      0.1818,
+      0.5534
+    ],
+    "within_one_accuracy_percent": 85.0,
+    "ordinal_mae": 0.65,
+    "quadratic_weighted_kappa": 0.4773
   },
   "resolution": {
     "accuracy_percent": 55.0,
+    "accuracy_wilson_95ci": [
+      34.21,
+      74.18
+    ],
     "confusion_matrix": {
       "resolved": {
         "resolved": 9,
@@ -34,21 +62,38 @@
       }
     }
   },
+  "agent_handled_well": {
+    "accuracy_percent": 95.0,
+    "accuracy_wilson_95ci": [
+      76.39,
+      99.11
+    ],
+    "f1_positive_class": 0.973
+  },
   "grounding": {
-    "grounding_rate_percent": 100.0
+    "grounding_rate_percent": 100.0,
+    "grounding_wilson_95ci": [
+      83.89,
+      100.0
+    ],
+    "note": "The baseline's grounding rate is trivially 100% because its evidence quotes are copied verbatim from transcript segments. This number is only meaningful for LLM providers (ollama, anthropic) that must generate quotes from memory."
   },
   "timing": {
     "resolution_time_mae_minutes": 0.337,
+    "mae_bootstrap_95ci_minutes": [
+      0.2356,
+      0.4389
+    ],
     "evaluated_calls_count": 9
   },
   "audio_transcription": {},
   "performance": {
-    "mean_latency_seconds": 0.004,
-    "p95_latency_seconds": 0.0048,
+    "mean_latency_seconds": 0.0043,
+    "p95_latency_seconds": 0.0052,
     "total_prompt_tokens": null,
     "total_eval_tokens": null
   },
-  "failures_count": 15,
+  "failures_count": 16,
   "failures": [
     {
       "call_id": "test_02_polite_but_unresolved",
@@ -76,6 +121,14 @@
         "Resolution mismatch: predicted 'unclear', true 'resolved'"
       ],
       "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from satisfied to neutral."
+    },
+    {
+      "call_id": "test_05_interruptions",
+      "hard_case_type": "interruptions",
+      "reasons": [
+        "agent_handled_well mismatch: predicted False, true True"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from upset to satisfied."
     },
     {
       "call_id": "test_06_thanks_no_fix",

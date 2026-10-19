@@ -21,6 +21,25 @@ set -euo pipefail
 RESULTS_DIR="evals/results"
 SPLITS=("dev" "test" "heldout")
 
+# Load .env if present
+if [ -f .env ]; then
+    set -a
+    # shellcheck disable=SC1091
+    source .env
+    set +a
+fi
+
+# Auto-detect python binary (prefer .venv if present)
+if [ -z "${PYTHON:-}" ]; then
+    if [ -x ".venv/bin/python" ]; then
+        PYTHON=".venv/bin/python"
+    elif [ -n "${VIRTUAL_ENV:-}" ] && [ -x "${VIRTUAL_ENV}/bin/python" ]; then
+        PYTHON="${VIRTUAL_ENV}/bin/python"
+    else
+        PYTHON="python"
+    fi
+fi
+
 mkdir -p "${RESULTS_DIR}"
 
 echo "======================================================="
@@ -43,7 +62,7 @@ else
         OUT_JSON="${RESULTS_DIR}/anthropic_${SPLIT}.json"
         OUT_MD="${RESULTS_DIR}/anthropic_${SPLIT}.md"
         echo "  [anthropic] split=${SPLIT} → ${OUT_JSON}"
-        python -m evals.run_eval \
+        "$PYTHON" -m evals.run_eval \
             --provider anthropic \
             --split "${SPLIT}" \
             --no-audio \
@@ -74,7 +93,7 @@ else
         OUT_JSON="${RESULTS_DIR}/ollama_${SPLIT}.json"
         OUT_MD="${RESULTS_DIR}/ollama_${SPLIT}.md"
         echo "  [ollama] split=${SPLIT} → ${OUT_JSON}"
-        python -m evals.run_eval \
+        "$PYTHON" -m evals.run_eval \
             --provider ollama \
             --split "${SPLIT}" \
             --no-audio \
