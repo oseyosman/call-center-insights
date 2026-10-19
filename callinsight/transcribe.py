@@ -43,13 +43,27 @@ def transcribe_audio(
     audio_path: str,
     model_size: str = "base",
     device: str = "cpu",
-    compute_type: str = "int8"
+    compute_type: str = "int8",
+    language: str = "en",
 ) -> Tuple[List[Segment], bool, float]:
     """Transcribe an audio file using faster-whisper.
 
     Features:
     - If stereo: left channel is treated as 'agent' and right channel as 'customer' with 1.0 confidence.
     - If mono: speaker roles are marked as 'inferred' with lower confidence (0.50).
+
+    Args:
+        audio_path: Path to the audio file.
+        model_size: Whisper model size (tiny/base/small/…).
+        device: Device string passed to faster-whisper.
+        compute_type: Quantisation type (int8/float16/…).
+        language: BCP-47 language code (default "en").  Bug 6 fix: was hardcoded.
+
+    Bug 6 fixes applied to every model.transcribe() call:
+        - vad_filter=True: removes silent frames so Whisper does not hallucinate on
+          the silent channel in a stereo split.
+        - condition_on_previous_text=False: prevents cascading hallucinations caused
+          by the model conditioning on its own previous (potentially wrong) output.
 
     Returns:
       (segments, is_stereo, speaker_diarization_confidence)
@@ -75,7 +89,13 @@ def transcribe_audio(
             sf.write(customer_wav, audio_data[:, 1], sr)
 
             # Transcribe Agent
-            agent_segs, _ = model.transcribe(agent_wav, language="en", beam_size=1)
+            agent_segs, _ = model.transcribe(
+                agent_wav,
+                language=language,
+                beam_size=1,
+                vad_filter=True,
+                condition_on_previous_text=False,
+            )
             for s in agent_segs:
                 txt = s.text.strip()
                 if txt:
@@ -88,7 +108,13 @@ def transcribe_audio(
                     ))
 
             # Transcribe Customer
-            cust_segs, _ = model.transcribe(customer_wav, language="en", beam_size=1)
+            cust_segs, _ = model.transcribe(
+                customer_wav,
+                language=language,
+                beam_size=1,
+                vad_filter=True,
+                condition_on_previous_text=False,
+            )
             for s in cust_segs:
                 txt = s.text.strip()
                 if txt:
@@ -106,7 +132,13 @@ def transcribe_audio(
 
     else:
         # Mono recording: cannot separate channels definitively
-        raw_segs, _ = model.transcribe(audio_path, language="en", beam_size=1)
+        raw_segs, _ = model.transcribe(
+            audio_path,
+            language=language,
+            beam_size=1,
+            vad_filter=True,
+            condition_on_previous_text=False,
+        )
         segments = []
         for s in raw_segs:
             txt = s.text.strip()

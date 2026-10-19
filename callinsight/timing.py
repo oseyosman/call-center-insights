@@ -28,42 +28,55 @@ def compute_call_duration(segments: List[Segment]) -> float:
 def find_first_customer_segment(segments: List[Segment]) -> Optional[Segment]:
     """Find the first segment spoken by the customer.
 
-    If speaker labels are unavailable or all unknown, falls back to the very first segment.
+    Returns None when no segment is labeled 'customer'.  Does NOT fall back to
+    segments[0] – a mono/unknown speaker must be handled explicitly by callers.
     """
     if not segments:
         return None
     for seg in segments:
         if seg.speaker == "customer":
             return seg
-    # Fallback if speaker diarization is mono/unknown
-    return segments[0]
+    return None
 
 
 def find_matching_segment(quote: str, segments: List[Segment]) -> Optional[Segment]:
-    """Find the transcript segment that contains the given quote."""
+    """Find the transcript segment that contains the given quote.
+
+    Matching strategy (in priority order):
+    1. Normalised direct substring: norm_quote is a substring of norm_seg text.
+    2. If the quote is ≥4 words: require that at least 80 % of its 4-gram
+       windows (in order) appear in the concatenated normalised transcript.
+    Both checks are case-insensitive and punctuation-stripped.
+    """
     norm_quote = normalize_text_for_search(quote)
     if not norm_quote:
         return None
 
-    # First attempt: direct normalized substring in segment
+    # 1. Direct normalised substring match per segment
     for seg in segments:
         norm_seg = normalize_text_for_search(seg.text)
         if norm_quote in norm_seg or norm_seg in norm_quote:
             return seg
 
-    # Second attempt: token overlap if segment was slightly split
-    quote_tokens = set(norm_quote.split())
-    if len(quote_tokens) >= 3:
-        best_seg = None
-        best_overlap = 0
-        for seg in segments:
-            seg_tokens = set(normalize_text_for_search(seg.text).split())
-            overlap = len(quote_tokens.intersection(seg_tokens))
-            if overlap > best_overlap and overlap >= min(3, len(quote_tokens) // 2):
-                best_overlap = overlap
-                best_seg = seg
-        if best_seg:
-            return best_seg
+    # 2. 4-gram sliding window: require ≥80 % of windows to appear in the
+    #    concatenated transcript text (ordered search).
+    quote_words = norm_quote.split()
+    if len(quote_words) >= 4:
+        norm_all = " ".join(normalize_text_for_search(s.text) for s in segments)
+        windows = [" ".join(quote_words[i:i + 4]) for i in range(len(quote_words) - 3)]
+        matched_windows = sum(1 for w in windows if w in norm_all)
+        if matched_windows / len(windows) >= 0.80:
+            # Return the segment whose text contains the most 4-grams
+            best_seg = None
+            best_count = 0
+            for seg in segments:
+                norm_seg = normalize_text_for_search(seg.text)
+                count = sum(1 for w in windows if w in norm_seg)
+                if count > best_count:
+                    best_count = count
+                    best_seg = seg
+            if best_seg:
+                return best_seg
 
     return None
 
@@ -76,13 +89,20 @@ def calculate_resolution_time(
     """Calculate resolution time in minutes from the first customer segment.
 
     Formula:
-      (timestamp of segment containing resolution evidence - timestamp of first customer segment) / 60.0
+      (timestamp of EARLIEST segment containing resolution evidence
+       − timestamp of first customer segment) / 60.0
 
     Rules:
     - If resolution is NOT 'resolved', returns None.
-    - If evidence list is empty, returns None.
+    - If evidence list is empty or segments is empty, returns None.
+    - If no customer-labeled segment exists, returns None (never guesses).
     - If no evidence quote matches any segment, returns None (not guessed).
-    - If calculated minutes < 0 (edge case where agent resolves before first customer speech), returns 0.0.
+    - If calculated minutes < 0 (edge case), returns 0.0.
+
+    Matching order per evidence item:
+    1. Quote is tried first (find_matching_segment).
+    2. Timestamp proximity (within 2 s) is used only as a tiebreaker when the
+       quote match fails.
     """
     if resolution != "resolved":
         return None
@@ -92,27 +112,34 @@ def calculate_resolution_time(
 
     first_cust_seg = find_first_customer_segment(segments)
     if first_cust_seg is None:
+        # Mono/inferred audio: cannot determine customer start time
         return None
 
-    # Search for the earliest matching segment among evidence items
-    # (or the one matching the resolution evidence)
-    matched_timestamp = None
+    # Collect matched segment start times for every evidence item
+    matched_starts: List[float] = []
+
     for ev in evidence:
-        # If timestamp is directly provided and valid, try to find matching segment around timestamp
-        if ev.timestamp is not None:
-            # Verify against segments
-            for seg in segments:
-                if abs(seg.start - ev.timestamp) <= 2.0:
-                    matched_timestamp = seg.start
-                    break
-        if matched_timestamp is None and ev.quote:
-            matching_seg = find_matching_segment(ev.quote, segments)
-            if matching_seg:
-                matched_timestamp = matching_seg.start
-                break
+        seg = None
 
-    if matched_timestamp is None:
+        # Primary: quote match
+        if ev.quote:
+            seg = find_matching_segment(ev.quote, segments)
+
+        # Fallback: timestamp proximity (tiebreaker only)
+        if seg is None and ev.timestamp is not None:
+            for s in segments:
+                if abs(s.start - ev.timestamp) <= 2.0:
+                    seg = s
+                    break
+
+        if seg is not None:
+            matched_starts.append(seg.start)
+
+    if not matched_starts:
         return None
+
+    # Use the EARLIEST matched timestamp
+    matched_timestamp = min(matched_starts)
 
     diff_seconds = matched_timestamp - first_cust_seg.start
     if diff_seconds < 0:

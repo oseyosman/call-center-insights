@@ -1,26 +1,39 @@
 import os
-import shutil
 import subprocess
-import pytest
+import sys
+import numpy as np
 import pandas as pd
+import pytest
+import soundfile as sf
 
 
+@pytest.mark.slow
 def test_cli_smoke_analyze(tmp_path):
+    try:
+        from faster_whisper import WhisperModel
+        try:
+            WhisperModel("tiny", device="cpu", compute_type="int8", local_files_only=True)
+        except Exception:
+            WhisperModel("tiny", device="cpu", compute_type="int8")
+    except Exception as exc:
+        pytest.skip(f"Whisper model cannot load offline: {exc}")
+
     out_dir = str(tmp_path / "test_reports")
-    samples_dir = "samples"
-
-    # Ensure samples dir exists and has at least one audio file
-    assert os.path.exists(samples_dir), "samples/ dir must exist"
-    wav_files = [f for f in os.listdir(samples_dir) if f.endswith(".wav")]
-    assert len(wav_files) > 0, "samples/ must contain rendered wav files"
-
-    # Run CLI analyze on a single audio sample directory or subset
     single_sample_dir = str(tmp_path / "single_sample")
     os.makedirs(single_sample_dir, exist_ok=True)
-    shutil.copy(os.path.join(samples_dir, wav_files[0]), os.path.join(single_sample_dir, wav_files[0]))
+
+    # Generate synthetic stereo audio
+    sample_rate = 16000
+    duration = 1.0
+    t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
+    left_channel = 0.1 * np.sin(2 * np.pi * 440 * t)
+    right_channel = 0.1 * np.sin(2 * np.pi * 880 * t)
+    stereo_data = np.stack([left_channel, right_channel], axis=-1).astype(np.float32)
+    sample_wav = os.path.join(single_sample_dir, "sample_synthetic.wav")
+    sf.write(sample_wav, stereo_data, sample_rate)
 
     cmd = [
-        sys_python := os.sys.executable,
+        sys.executable,
         "-m", "callinsight.cli",
         "analyze", single_sample_dir,
         "--out", out_dir,

@@ -4,6 +4,7 @@ Visualizes call center performance metrics, sentiment shifts, resolution times,
 and per-call evidence quotes with timestamps.
 """
 
+import html
 import json
 import os
 import pandas as pd
@@ -170,22 +171,26 @@ def main():
             call_row = filtered_df[filtered_df["call_id"] == selected_call_id].iloc[0]
 
             col_a, col_b, col_c = st.columns(3)
-            col_a.write(f"**Resolution:** `{call_row['resolution']}`")
-            col_a.write(f"**Duration:** `{call_row['duration_seconds']}s`")
-            col_b.write(f"**Sentiment Shift:** `{call_row['sentiment_shift']}`")
-            col_b.write(f"**Resolution Time:** `{call_row['resolution_time_minutes']} min`")
-            col_c.write(f"**Agent Handled Well:** `{call_row['agent_handled_well']}`")
+            col_a.write(f"**Resolution:** `{html.escape(str(call_row['resolution']))}`")
+            col_a.write(f"**Duration:** `{html.escape(str(call_row['duration_seconds']))}s`")
+            col_b.write(f"**Sentiment Shift:** `{html.escape(str(call_row['sentiment_shift']))}`")
+            col_b.write(f"**Resolution Time:** `{html.escape(str(call_row['resolution_time_minutes']))} min`")
+            col_c.write(f"**Agent Handled Well:** `{html.escape(str(call_row['agent_handled_well']))}`")
             is_gr = call_row['grounded']
             grounding_tag = '<span class="grounded-tag">✓ Grounded</span>' if is_gr else '<span class="ungrounded-tag">✗ Ungrounded</span>'
             col_c.write(f"**Grounding:** {grounding_tag}", unsafe_allow_html=True)
 
-            st.markdown(f"**Reason:** *{call_row.get('reason', 'N/A')}*")
+            # Bug 8: escape reason before rendering
+            reason_escaped = html.escape(str(call_row.get('reason', 'N/A')))
+            st.markdown(f"**Reason:** *{reason_escaped}*")
 
             st.write("### Supporting Evidence Quotes")
             evidence_val = call_row.get("evidence", "")
             if pd.notna(evidence_val) and str(evidence_val).strip():
                 for quote_item in str(evidence_val).split("; "):
-                    st.markdown(f'<div class="quote-box">{quote_item}</div>', unsafe_allow_html=True)
+                    # Bug 8 fix: html.escape() transcript-derived text before unsafe_allow_html
+                    safe_quote = html.escape(quote_item)
+                    st.markdown(f'<div class="quote-box">{safe_quote}</div>', unsafe_allow_html=True)
             else:
                 st.caption("No evidence quotes attached to this call.")
         else:

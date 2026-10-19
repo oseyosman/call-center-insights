@@ -1,3 +1,10 @@
+"""Regression tests for callinsight/timing.py.
+
+Tests cover:
+- compute_call_duration
+- find_first_customer_segment (including mono/inferred fallback change)
+- calculate_resolution_time (bug 2 + bug 5 fixes)
+"""
 import pytest
 from callinsight.schema import Segment, EvidenceItem
 from callinsight.timing import (
@@ -29,11 +36,21 @@ def test_find_first_customer_segment():
     assert first_cust.start == 2.5
     assert first_cust.speaker == "customer"
 
-    # Fallback when speaker is unknown
+
+def test_find_first_customer_segment_no_customer_returns_none():
+    """Bug 5 fix: when all speakers are 'inferred', must return None (not segments[0])."""
     mono_segments = [
-        Segment(start=1.0, end=4.0, speaker="unknown", text="Hello caller"),
+        Segment(start=1.0, end=4.0, speaker="inferred", text="Hello caller"),
+        Segment(start=4.5, end=8.0, speaker="inferred", text="Let me check"),
     ]
-    assert find_first_customer_segment(mono_segments).start == 1.0
+    assert find_first_customer_segment(mono_segments) is None
+
+
+def test_find_first_customer_segment_unknown_speaker_returns_none():
+    """Bug 5 fix: 'unknown' speaker also should not be treated as customer."""
+    segs = [Segment(start=1.0, end=4.0, speaker="unknown", text="Hello caller")]
+    # find_first_customer_segment only matches speaker == "customer"
+    assert find_first_customer_segment(segs) is None
 
 
 def test_resolution_time_resolved():
@@ -49,6 +66,26 @@ def test_resolution_time_resolved():
     res_time = calculate_resolution_time("resolved", evidence, segments)
     # (12.0 - 3.0) / 60.0 = 9.0 / 60.0 = 0.15 minutes
     assert res_time == 0.15
+
+
+def test_resolution_time_earliest_match_returned():
+    """Bug 2 regression: with evidence at 30s and 120s, must return EARLIEST (30s).
+
+    Segments: customer at 0s, agent at 30s, customer at 120s.
+    Evidence: agent quote at 30s, customer quote at 120s.
+    Expected resolution_time = (30 - 0) / 60 = 0.5 min.
+    """
+    segments = [
+        Segment(start=0.0, end=3.0, speaker="customer", text="router broken"),
+        Segment(start=30.0, end=33.0, speaker="agent", text="I fixed it for you"),
+        Segment(start=120.0, end=123.0, speaker="customer", text="thanks for your help today"),
+    ]
+    evidence = [
+        EvidenceItem(quote="I fixed it for you", timestamp=30.0),
+        EvidenceItem(quote="thanks for your help today", timestamp=120.0),
+    ]
+    result = calculate_resolution_time("resolved", evidence, segments)
+    assert result == 0.5, f"Expected 0.5, got {result}"
 
 
 def test_resolution_time_unresolved_returns_none():
@@ -77,5 +114,14 @@ def test_resolution_time_hallucinated_evidence_returns_none():
     evidence = [
         EvidenceItem(quote="A quote that never occurred in the call whatsoever", timestamp=None)
     ]
-    # If quote doesn't match and timestamp is None, resolution time is null (not guessed)
+    assert calculate_resolution_time("resolved", evidence, segments) is None
+
+
+def test_resolution_time_no_customer_speaker_returns_none():
+    """Bug 5: when all segments are 'inferred', resolution_time must be None."""
+    segments = [
+        Segment(start=0.0, end=5.0, speaker="inferred", text="Hello there."),
+        Segment(start=5.0, end=10.0, speaker="inferred", text="We will see."),
+    ]
+    evidence = [EvidenceItem(quote="We will see.", timestamp=5.0)]
     assert calculate_resolution_time("resolved", evidence, segments) is None

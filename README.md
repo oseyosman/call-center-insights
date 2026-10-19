@@ -35,7 +35,7 @@ A local-first pipeline for analyzing call-center audio recordings. It extracts p
                    |
                    v
        +-----------------------+
-       |   Timing Analytics    |  Resolution time = (quote timestamp - 1st cust seg)
+       |   Timing Analytics    |  Resolution time = (earliest quote timestamp - 1st cust seg)
        | (timing.py)           |  Purely deterministic math; never guessed or hallucinated
        +-----------+-----------+
                    |
@@ -81,16 +81,16 @@ cd call-center-insights
 python3.11 -m venv .venv
 source .venv/bin/activate
 
-# Install dependencies and editable package
+# Install all dependencies (single source of truth: pyproject.toml)
 pip install --upgrade pip
-pip install -r requirements.txt
-pip install -e .
+pip install -e ".[dev]"
 ```
 
 ### 2. Run Test Suite
 
 ```bash
-pytest -v
+pytest -m "not slow" -q      # fast suite (no Whisper model required)
+pytest -v                     # full suite including @pytest.mark.slow tests
 ```
 
 ### 3. Generate Simulated Demo Audio
@@ -123,56 +123,79 @@ Open `http://localhost:8501` to view interactive KPI cards, sentiment shift char
 
 ## Evaluation Benchmark & Provider Comparison
 
-The project includes 40 hand-crafted, simulated call transcripts with ground-truth labels across both standard interactions and deliberate edge cases:
-- *polite but unresolved* (customer remains courteous, but request is denied)
-- *resolved but still angry* (issue fixed, but customer remains angry at company)
-- *sarcasm* ("What a brilliant update to wipe my server!")
-- *interruptions* (rapid speaker turn-taking)
-- *thanks with no fix* (customer says "thanks anyway" without resolution)
-- *escalation to supervisor*
-- *customer calms down* (angry start -> handled well -> satisfied end)
+The project includes 60 hand-crafted, simulated call transcripts split across three sets:
 
-Split:
-- **Dev Set (20 calls)**: Used for initial measurement and quality gating.
+- **Dev Set (20 calls)**: Used for initial measurement and CI quality gating.
 - **Test Set (20 calls)**: Held-out test set written before evaluation; never tuned against.
+- **Heldout Set (20 calls)**: Truly held-out split with novel hard-case types not seen in dev or test — see [`evals/LABELING.md`](evals/LABELING.md).
+
+Hard-case types across dev and test: *polite but unresolved*, *resolved but still angry*, *sarcasm*, *interruptions*, *thanks with no fix*, *escalation to supervisor*, *rude agent*.
+
+Heldout-only types: *partial resolution*, *callback promised*, *wrong-customer authentication*, *language barrier*, *hold-time frustration*, *agent self-correction*, *multi-issue calls with mixed outcomes*.
 
 ### Real Benchmark Results
 
-> All metrics below were executed directly and are recorded in `evals/results/baseline_v0.json` and `evals/results/baseline_test.json`.
+> **⚠️ Interpretation notice**: Results below are from n=20 calls per split with a **single annotator**. Confidence intervals (Wilson 95% CI) span roughly ±20 percentage points. This is a directional benchmark, not a production deployment study. All audio is TTS-generated; real telephony audio will have higher WER. The baseline's 100% grounding rate is trivially achieved because its evidence quotes are copied verbatim from transcript segments — grounding is only a meaningful signal for LLM providers (ollama, anthropic) that must generate quotes from memory.
 
-| Provider / Model | Split | Sentiment Start Acc (Macro-F1) | Sentiment End Acc (Macro-F1) | Resolution Acc | Grounding Rate | Res. Time MAE | Audio WER | Latency (mean) |
-| ---------------- | ----- | ------------------------------ | ---------------------------- | -------------- | -------------- | ------------- | --------- | -------------- |
-| **Baseline (VADER + Keywords)** | **Dev (20)** | **50.0%** (0.4476) | **55.0%** (0.4095) | **65.0%** | **100.0%** | **0.264 min** | **25.09%** | **0.006s** |
-| **Baseline (VADER + Keywords)** | **Test (20)** | **45.0%** (0.4181) | **55.0%** (0.3738) | **55.0%** | **100.0%** | **0.337 min** | N/A | **0.004s** |
-| **Ollama (Local LLM)** | Dev / Test | *Requires local Ollama daemon* | *Requires local Ollama daemon* | *Requires local Ollama daemon* | *Requires local Ollama daemon* | *Requires local Ollama daemon* | N/A | N/A |
-| **Anthropic Claude** | Dev / Test | *Requires ANTHROPIC_API_KEY* | *Requires ANTHROPIC_API_KEY* | *Requires ANTHROPIC_API_KEY* | *Requires ANTHROPIC_API_KEY* | *Requires ANTHROPIC_API_KEY* | N/A | N/A |
+All numbers below were produced by running the commands in the **Quality Gate Commands** section and are recorded in `evals/results/`.
+
+#### Baseline (VADER + Keywords)
+
+| Split | Sent. Start Acc | Within-One | Sent. End Acc | Within-One | Resolution Acc | Agent Acc | Grounding | Res. Time MAE | Latency |
+|-------|-----------------|------------|---------------|------------|----------------|-----------|-----------|---------------|---------|
+| **Dev (20)** | **50.0%** [29.9%, 70.1%] | **90.0%** | **55.0%** [34.2%, 74.2%] | **95.0%** | **65.0%** [43.3%, 81.9%] | **100.0%** [83.9%, 100%] | **100.0%**¹ | **0.264 min** [0.156, 0.376] | **0.004s** |
+| **Test (20)** | **45.0%** [25.8%, 65.8%] | **90.0%** | **55.0%** [34.2%, 74.2%] | **85.0%** | **55.0%** [34.2%, 74.2%] | **95.0%** [76.4%, 99.1%] | **100.0%**¹ | **0.337 min** [0.236, 0.439] | **0.005s** |
+| **Heldout (20)** | **15.0%** [5.2%, 36.0%] | **90.0%** | **40.0%** [21.9%, 61.3%] | **100.0%** | **55.0%** [34.2%, 74.2%] | **100.0%** [83.9%, 100%] | **100.0%**¹ | **0.268 min** [0.174, 0.367] | **0.006s** |
+
+> ¹ Baseline grounding is trivially 100%: the baseline copies quotes from the transcript. Only meaningful for LLM providers.
+
+#### Other Providers
+
+| Provider | Split | Sentiment Start | Sentiment End | Resolution | Agent Acc | Grounding | Res. Time MAE | Latency |
+|----------|-------|-----------------|---------------|------------|-----------|-----------|---------------|---------|
+| **Ollama (Local LLM)** | Dev / Test / Heldout | *Requires local Ollama daemon* | — | — | — | — | — | — |
+| **Anthropic Claude** | Dev / Test / Heldout | *Requires `ANTHROPIC_API_KEY`* | — | — | — | — | — | — |
+
+To run provider evals: `bash scripts/run_provider_evals.sh`
 
 ### Baseline Failure Modes (Why Weak Baselines Fail)
 1. **Sarcasm Blindness**: VADER scored sarcastic praise ("Oh fantastic, what a masterpiece of software design to wipe my data") as positive compound sentiment, predicting *satisfied* when the true sentiment was *angry*.
 2. **Polite False-Resolutions**: When customers politely said "thank you so much for checking anyway" after a denied refund or coupon, keyword rules detected "thank you" and falsely classified the call as *resolved*.
 3. **Escalations**: Complex multi-turn conflicts without explicit resolution keywords default to *unclear* rather than identifying that the customer was transferred or remained unresolved.
+4. **Heldout Collapse on Sentiment Start**: The heldout set has 90% within-one accuracy but only 15% exact accuracy on sentiment start — the baseline badly overestimates `neutral`/`satisfied` for calls where customers start with moderate frustration (`upset`) rather than extreme anger (`angry`).
 
-### Running Quality Gate Command
+### Quality Gate Commands
 
 ```bash
+# Dev — with regression check vs committed baseline:
 python -m evals.run_eval \
   --provider baseline \
   --split dev \
   --no-audio \
+  --baseline-json evals/results/baseline_v0.json \
   --min-sentiment-start-acc 45.0 \
   --min-sentiment-end-acc 50.0 \
   --min-resolution-acc 60.0 \
   --min-grounding-rate 95.0 \
   --max-resolution-time-mae 0.50
+
+# Test:
+python -m evals.run_eval --provider baseline --split test --no-audio
+
+# Heldout:
+python -m evals.run_eval --provider baseline --split heldout --no-audio
 ```
-Exits `0` if all thresholds pass; exits `1` if any threshold is violated.
+
+Exits `0` if all thresholds pass and no regression >5pp detected; exits `1` otherwise.
 
 ---
 
 ## Limitations
 
 1. **Simulated Data Only**: The evaluation datasets and demo audio are synthetic and TTS-generated. Real call centers have overlapping crosstalk, acoustic clipping, background chatter, and telephony codecs.
-2. **Small Benchmark Sample**: 40 calls provide meaningful regression detection for hard conversational cases, but a production system requires hundreds of calls across distinct customer service domains.
-3. **Transcript-Based Emotion**: Because prosody is descriptive only, subtle emotional cues (tone of voice, deadpan delivery, quiet sobbing) are not captured if not reflected in the transcript words.
-4. **Mono Speaker Diarization**: When processing mono audio without stereo channel separation, speaker attribution confidence is halved (0.50) and marked as inferred, as local Whisper does not perform native diarization.
-5. **Whisper Transcription Errors**: Automatic speech recognition struggles with heavy accents, specialized domain jargon (e.g. medical codes, hardware part numbers), and low-bitrate telephony (25.09% WER measured on TTS samples).
+2. **Single Annotator**: All ground-truth labels were assigned by one person with no adjudication. See [`evals/LABELING.md`](evals/LABELING.md) for label definitions.
+3. **Small Benchmark Sample**: 20 calls per split means ~±20pp Wilson CIs. Treat results as directional signals, not statistically definitive conclusions.
+4. **Transcript-Based Emotion**: Because prosody is descriptive only, subtle emotional cues (tone of voice, deadpan delivery, quiet sobbing) are not captured if not reflected in the transcript words.
+5. **Mono Speaker Diarization**: When processing mono audio without stereo channel separation, speaker attribution confidence is halved (0.50) and marked as inferred, as local Whisper does not perform native diarization.
+6. **Whisper Transcription Errors**: Automatic speech recognition struggles with heavy accents, specialized domain jargon, and low-bitrate telephony (25.09% WER measured on TTS dev samples).
+7. **Baseline Grounding is Trivial**: The baseline achieves 100% grounding because it copies quotes verbatim from transcript segments. This is not a meaningful quality signal for the baseline provider.

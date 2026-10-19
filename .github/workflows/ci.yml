@@ -23,21 +23,25 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -e .
+          pip install -e ".[dev]"
 
-      - name: Run Pytest Suite
+      - name: Run Pytest Suite (non-slow tests only)
         run: |
-          pytest -v
+          pytest -m "not slow" -q
 
-      - name: Run Baseline Quality Gate
+      - name: Run Baseline Quality Gate (absolute thresholds)
         run: |
           python -m evals.run_eval \
             --provider baseline \
             --split dev \
             --no-audio \
+            --out-json evals/results/ci_dev.json \
+            --out-md  evals/results/ci_dev.md \
             --min-sentiment-start-acc 45.0 \
             --min-sentiment-end-acc 50.0 \
             --min-resolution-acc 60.0 \
             --min-grounding-rate 95.0 \
-            --max-resolution-time-mae 0.50
+            --max-resolution-time-mae 0.50 \
+            --baseline-json evals/results/baseline_v0.json \
+            --max-acc-drop 5.0 \
+            --max-mae-increase 0.1

@@ -2,29 +2,57 @@
   "metadata": {
     "notice": "SIMULATED DATA: All evaluation results are strictly from synthetic/simulated call transcripts and recordings.",
     "provider": "baseline",
-    "split": "dev",
+    "split": "heldout",
     "total_calls": 20,
-    "timestamp": "2026-10-19 02:38:08 UTC"
+    "timestamp": "2026-10-19 18:08:48 UTC",
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 42
   },
   "sentiment_start": {
-    "accuracy_percent": 50.0,
-    "macro_f1": 0.4476
+    "accuracy_percent": 15.0,
+    "accuracy_wilson_95ci": [
+      5.24,
+      36.04
+    ],
+    "macro_f1": 0.1167,
+    "macro_f1_bootstrap_95ci": [
+      0.0,
+      0.2222
+    ],
+    "within_one_accuracy_percent": 90.0,
+    "ordinal_mae": 1.0,
+    "quadratic_weighted_kappa": 0.2553
   },
   "sentiment_end": {
-    "accuracy_percent": 55.0,
-    "macro_f1": 0.4095
+    "accuracy_percent": 40.0,
+    "accuracy_wilson_95ci": [
+      21.88,
+      61.34
+    ],
+    "macro_f1": 0.2008,
+    "macro_f1_bootstrap_95ci": [
+      0.1,
+      0.3046
+    ],
+    "within_one_accuracy_percent": 100.0,
+    "ordinal_mae": 0.6,
+    "quadratic_weighted_kappa": 0.6091
   },
   "resolution": {
-    "accuracy_percent": 65.0,
+    "accuracy_percent": 55.0,
+    "accuracy_wilson_95ci": [
+      34.21,
+      74.18
+    ],
     "confusion_matrix": {
       "resolved": {
         "resolved": 9,
         "unresolved": 0,
-        "unclear": 1
+        "unclear": 0
       },
       "unresolved": {
-        "resolved": 3,
-        "unresolved": 2,
+        "resolved": 6,
+        "unresolved": 0,
         "unclear": 3
       },
       "unclear": {
@@ -34,25 +62,88 @@
       }
     }
   },
+  "agent_handled_well": {
+    "accuracy_percent": 100.0,
+    "accuracy_wilson_95ci": [
+      83.89,
+      100.0
+    ],
+    "f1_positive_class": 1.0
+  },
   "grounding": {
-    "grounding_rate_percent": 100.0
+    "grounding_rate_percent": 100.0,
+    "grounding_wilson_95ci": [
+      83.89,
+      100.0
+    ],
+    "note": "The baseline's grounding rate is trivially 100% because its evidence quotes are copied verbatim from transcript segments. This number is only meaningful for LLM providers (ollama, anthropic) that must generate quotes from memory."
   },
   "timing": {
-    "resolution_time_mae_minutes": 0.264,
+    "resolution_time_mae_minutes": 0.268,
+    "mae_bootstrap_95ci_minutes": [
+      0.1744,
+      0.3667
+    ],
     "evaluated_calls_count": 9
   },
   "audio_transcription": {},
   "performance": {
-    "mean_latency_seconds": 0.0043,
-    "p95_latency_seconds": 0.0053,
+    "mean_latency_seconds": 0.0059,
+    "p95_latency_seconds": 0.0086,
     "total_prompt_tokens": null,
     "total_eval_tokens": null
   },
-  "failures_count": 14,
+  "failures_count": 18,
   "failures": [
     {
-      "call_id": "dev_02_polite_but_unresolved",
-      "hard_case_type": "polite_but_unresolved",
+      "call_id": "heldout_01_partial_resolution",
+      "hard_case_type": "partial_resolution",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'angry', true 'upset'",
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
+        "Resolution mismatch: predicted 'resolved', true 'unresolved'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from angry to satisfied."
+    },
+    {
+      "call_id": "heldout_02_callback_promised",
+      "hard_case_type": "callback_promised",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'angry', true 'upset'",
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
+        "Resolution mismatch: predicted 'resolved', true 'unresolved'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from angry to satisfied."
+    },
+    {
+      "call_id": "heldout_03_wrong_customer_auth",
+      "hard_case_type": "wrong_customer_authentication",
+      "reasons": [
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from neutral to satisfied."
+    },
+    {
+      "call_id": "heldout_04_language_barrier",
+      "hard_case_type": "language_barrier",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'angry', true 'upset'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from angry to satisfied."
+    },
+    {
+      "call_id": "heldout_05_hold_time_frustration",
+      "hard_case_type": "hold_time_frustration",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'angry'",
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
+        "Resolution mismatch: predicted 'resolved', true 'unresolved'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from upset to satisfied."
+    },
+    {
+      "call_id": "heldout_07_multi_issue_one_fixed",
+      "hard_case_type": "multi_issue_one_fixed",
       "reasons": [
         "Sentiment start mismatch: predicted 'satisfied', true 'neutral'",
         "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
@@ -61,26 +152,43 @@
       "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from satisfied to satisfied."
     },
     {
-      "call_id": "dev_03_resolved_still_angry",
-      "hard_case_type": "resolved_still_angry",
+      "call_id": "heldout_08_hold_time_abandoned",
+      "hard_case_type": "hold_time_frustration",
       "reasons": [
-        "Sentiment start mismatch: predicted 'upset', true 'angry'"
+        "Sentiment start mismatch: predicted 'neutral', true 'upset'"
       ],
-      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from upset to angry."
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from neutral to satisfied."
     },
     {
-      "call_id": "dev_04_sarcasm",
-      "hard_case_type": "sarcasm",
+      "call_id": "heldout_09_partial_refund_dispute",
+      "hard_case_type": "partial_resolution",
       "reasons": [
-        "Sentiment start mismatch: predicted 'satisfied', true 'angry'",
-        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
-        "Resolution mismatch: predicted 'unclear', true 'resolved'"
+        "Sentiment start mismatch: predicted 'neutral', true 'upset'",
+        "Sentiment end mismatch: predicted 'upset', true 'angry'",
+        "Resolution mismatch: predicted 'unclear', true 'unresolved'"
       ],
-      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from satisfied to satisfied."
+      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from neutral to upset."
     },
     {
-      "call_id": "dev_05_interruptions",
-      "hard_case_type": "interruptions",
+      "call_id": "heldout_10_callback_fulfilled",
+      "hard_case_type": "callback_promised",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'satisfied', true 'upset'",
+        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from satisfied to satisfied."
+    },
+    {
+      "call_id": "heldout_11_multi_issue_both_fixed",
+      "hard_case_type": "multi_issue_one_fixed",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'satisfied', true 'neutral'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from satisfied to satisfied."
+    },
+    {
+      "call_id": "heldout_12_agent_self_correction_wrong_plan",
+      "hard_case_type": "agent_self_correction",
       "reasons": [
         "Sentiment start mismatch: predicted 'neutral', true 'upset'",
         "Sentiment end mismatch: predicted 'satisfied', true 'neutral'"
@@ -88,91 +196,68 @@
       "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from neutral to satisfied."
     },
     {
-      "call_id": "dev_06_thanks_no_fix",
-      "hard_case_type": "thanks_no_fix",
-      "reasons": [
-        "Sentiment start mismatch: predicted 'satisfied', true 'neutral'",
-        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
-        "Resolution mismatch: predicted 'resolved', true 'unresolved'"
-      ],
-      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from satisfied to satisfied."
-    },
-    {
-      "call_id": "dev_07_escalation_to_supervisor",
-      "hard_case_type": "escalation_to_supervisor",
-      "reasons": [
-        "Sentiment end mismatch: predicted 'upset', true 'angry'",
-        "Resolution mismatch: predicted 'unclear', true 'unresolved'"
-      ],
-      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from upset to upset."
-    },
-    {
-      "call_id": "dev_08_rude_agent",
-      "hard_case_type": "rude_agent",
-      "reasons": [
-        "Sentiment end mismatch: predicted 'upset', true 'angry'"
-      ],
-      "extractor_reason": "Baseline rule classified resolution as unresolved with customer sentiment shifting from neutral to upset."
-    },
-    {
-      "call_id": "dev_10_unclear_connection_drop",
-      "hard_case_type": "call_dropped_unclear",
-      "reasons": [
-        "Sentiment start mismatch: predicted 'neutral', true 'upset'"
-      ],
-      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from neutral to neutral."
-    },
-    {
-      "call_id": "dev_12_warranty_claim_rejected",
-      "hard_case_type": "dispute_unresolved",
-      "reasons": [
-        "Sentiment start mismatch: predicted 'neutral', true 'upset'",
-        "Sentiment end mismatch: predicted 'satisfied', true 'angry'",
-        "Resolution mismatch: predicted 'unclear', true 'unresolved'"
-      ],
-      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from neutral to satisfied."
-    },
-    {
-      "call_id": "dev_13_subscription_cancellation_smooth",
-      "hard_case_type": "routine_cancellation",
+      "call_id": "heldout_13_language_barrier_unresolved",
+      "hard_case_type": "language_barrier",
       "reasons": [
         "Sentiment start mismatch: predicted 'satisfied', true 'neutral'"
       ],
+      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from satisfied to neutral."
+    },
+    {
+      "call_id": "heldout_14_wrong_auth_lockout",
+      "hard_case_type": "wrong_customer_authentication",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'neutral', true 'upset'",
+        "Sentiment end mismatch: predicted 'upset', true 'neutral'",
+        "Resolution mismatch: predicted 'unclear', true 'unresolved'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from neutral to upset."
+    },
+    {
+      "call_id": "heldout_15_hold_frustration_abandoned",
+      "hard_case_type": "hold_time_frustration",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'satisfied', true 'angry'"
+      ],
       "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from satisfied to satisfied."
     },
     {
-      "call_id": "dev_15_wrong_department",
-      "hard_case_type": "transfer_unresolved",
+      "call_id": "heldout_16_multi_issue_none_fixed",
+      "hard_case_type": "multi_issue_one_fixed",
       "reasons": [
-        "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
+        "Sentiment start mismatch: predicted 'neutral', true 'upset'",
+        "Sentiment end mismatch: predicted 'upset', true 'angry'",
+        "Resolution mismatch: predicted 'resolved', true 'unresolved'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from neutral to upset."
+    },
+    {
+      "call_id": "heldout_17_callback_agent_self_correct",
+      "hard_case_type": "agent_self_correction",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'upset', true 'angry'"
+      ],
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from upset to satisfied."
+    },
+    {
+      "call_id": "heldout_18_partial_resolution_shipping",
+      "hard_case_type": "partial_resolution",
+      "reasons": [
+        "Sentiment start mismatch: predicted 'angry', true 'upset'",
+        "Sentiment end mismatch: predicted 'upset', true 'neutral'",
         "Resolution mismatch: predicted 'unclear', true 'unresolved'"
       ],
-      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from neutral to satisfied."
+      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from angry to upset."
     },
     {
-      "call_id": "dev_16_disputed_charge_investigation",
-      "hard_case_type": "in_progress_unclear",
+      "call_id": "heldout_20_language_barrier_partial",
+      "hard_case_type": "language_barrier",
       "reasons": [
-        "Sentiment start mismatch: predicted 'neutral', true 'upset'"
-      ],
-      "extractor_reason": "Baseline rule classified resolution as unclear with customer sentiment shifting from neutral to neutral."
-    },
-    {
-      "call_id": "dev_18_system_outage_helpless",
-      "hard_case_type": "unresolved_outage",
-      "reasons": [
-        "Sentiment start mismatch: predicted 'neutral', true 'angry'"
-      ],
-      "extractor_reason": "Baseline rule classified resolution as unresolved with customer sentiment shifting from neutral to angry."
-    },
-    {
-      "call_id": "dev_19_polite_cancel_flight",
-      "hard_case_type": "polite_but_unresolved",
-      "reasons": [
+        "Sentiment start mismatch: predicted 'angry', true 'upset'",
         "Sentiment end mismatch: predicted 'satisfied', true 'neutral'",
         "Resolution mismatch: predicted 'resolved', true 'unresolved'"
       ],
-      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from neutral to satisfied."
+      "extractor_reason": "Baseline rule classified resolution as resolved with customer sentiment shifting from angry to satisfied."
     }
   ]
 }

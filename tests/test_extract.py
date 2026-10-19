@@ -1,3 +1,9 @@
+"""Regression tests for callinsight/extract.py.
+
+Covers: verify_grounding (bug 3), FakeExtractor grounding flag (bug 4),
+BaselineExtractor, mono/inferred speaker annotation (bug 5),
+analyze_transcript PII redaction, and Ollama retry.
+"""
 import pytest
 from pydantic import ValidationError
 from unittest.mock import MagicMock, patch
@@ -6,12 +12,17 @@ from callinsight.schema import CallExtractionSchema, EvidenceItem, Segment
 from callinsight.extract import (
     verify_grounding,
     BaselineExtractor,
+    FakeExtractor,
     analyze_transcript,
     get_extractor,
     OllamaExtractor,
     AnthropicExtractor,
 )
 
+
+# ---------------------------------------------------------------------------
+# Schema validation
+# ---------------------------------------------------------------------------
 
 def test_schema_validation_valid():
     data = {
@@ -42,6 +53,10 @@ def test_schema_validation_invalid_sentiment():
         CallExtractionSchema.model_validate(data)
 
 
+# ---------------------------------------------------------------------------
+# verify_grounding (bug 3: ordered 80% 4-gram window requirement)
+# ---------------------------------------------------------------------------
+
 def test_grounding_check_grounded():
     transcript = (
         "Agent: Hello how can I help you today? Customer: My bill has an unexpected charge. "
@@ -56,6 +71,16 @@ def test_grounding_check_grounded():
     assert ungrounded == []
 
 
+def test_grounding_check_punctuation_difference_is_grounded():
+    """Bug 3: a quote that differs only in punctuation must still be grounded."""
+    transcript = "Agent: I have refunded that fee for you right away. Thank you for calling."
+    evidence = [
+        EvidenceItem(quote="I have refunded that fee for you right away", timestamp=5.0)
+    ]
+    is_grounded, ungrounded = verify_grounding(evidence, transcript)
+    assert is_grounded is True, f"Expected grounded, got ungrounded: {ungrounded}"
+
+
 def test_grounding_check_ungrounded():
     transcript = "Agent: Hello. Customer: My internet is down. Agent: Please restart your router."
     evidence = [
@@ -66,6 +91,37 @@ def test_grounding_check_ungrounded():
     assert len(ungrounded) == 1
     assert "I have credited your account" in ungrounded[0]
 
+
+def test_grounding_check_half_fabricated_is_ungrounded():
+    """Bug 3 regression: a quote where only one 4-gram matches (< 80%) must be ungrounded."""
+    transcript = (
+        "Agent: Your account balance is twenty dollars. "
+        "Customer: Thank you very much."
+    )
+    # Real first half, fabricated second half – only ~1/4 windows will match
+    fabricated_quote = "Your account balance is twenty dollars plus a fictitious credit of one hundred."
+    evidence = [EvidenceItem(quote=fabricated_quote, timestamp=0.0)]
+    is_grounded, ungrounded = verify_grounding(evidence, transcript)
+    assert is_grounded is False, "Half-fabricated quote should be ungrounded"
+    assert len(ungrounded) == 1
+
+
+def test_grounding_check_real_quote_fully_grounded():
+    """Bug 3: a quote fully present in transcript must be grounded regardless of length."""
+    transcript = (
+        "Agent: I will apply the promotional discount of fifteen percent to your next order."
+    )
+    evidence = [EvidenceItem(
+        quote="I will apply the promotional discount of fifteen percent to your next order.",
+        timestamp=3.0
+    )]
+    is_grounded, ungrounded = verify_grounding(evidence, transcript)
+    assert is_grounded is True
+
+
+# ---------------------------------------------------------------------------
+# Baseline extractor
+# ---------------------------------------------------------------------------
 
 def test_baseline_extractor_runs():
     extractor = BaselineExtractor()
@@ -80,6 +136,37 @@ def test_baseline_extractor_runs():
     assert res.resolution == "resolved"
     assert meta["provider"] == "baseline"
 
+
+def test_baseline_extractor_inferred_speaker_annotates_reason():
+    """Bug 5: when all segments are 'inferred', reason must contain the inferred-speaker notice."""
+    extractor = BaselineExtractor()
+    segments = [
+        Segment(start=0.0, end=5.0, speaker="inferred", text="Hello I need some help with my bill."),
+        Segment(start=5.0, end=10.0, speaker="inferred", text="Let me look that up for you right away."),
+    ]
+    res, meta = extractor.extract(segments)
+    assert "speaker attribution inferred" in res.reason.lower() or "inferred" in res.reason.lower(), \
+        f"Expected inferred annotation in reason, got: {res.reason}"
+
+
+# ---------------------------------------------------------------------------
+# FakeExtractor grounding test (bug 4)
+# ---------------------------------------------------------------------------
+
+def test_fake_extractor_produces_ungrounded_result():
+    """Bug 4: analyze_transcript must flag grounded=False when FakeExtractor is used."""
+    segments = [
+        Segment(start=0.0, end=5.0, speaker="customer", text="My router keeps disconnecting."),
+        Segment(start=5.0, end=10.0, speaker="agent", text="I will reset your connection now."),
+    ]
+    result = analyze_transcript("call-fake-001", segments, extractor=FakeExtractor())
+    assert result.grounded is False, "FakeExtractor's fabricated quote should be flagged as ungrounded"
+    assert len(result.ungrounded_quotes) >= 1
+
+
+# ---------------------------------------------------------------------------
+# End-to-end with PII redaction
+# ---------------------------------------------------------------------------
 
 def test_analyze_transcript_end_to_end_with_pii_redaction():
     segments = [
@@ -106,10 +193,13 @@ def test_analyze_transcript_end_to_end_with_pii_redaction():
     assert result.grounded is True
 
 
+# ---------------------------------------------------------------------------
+# Ollama retry
+# ---------------------------------------------------------------------------
+
 def test_ollama_retry_on_invalid_json():
     extractor = OllamaExtractor()
 
-    # Simulate first response returning invalid json, then second response returning valid json
     valid_payload = {
         "message": {
             "content": (

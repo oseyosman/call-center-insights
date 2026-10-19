@@ -1,0 +1,495 @@
+[
+  {
+    "call_id": "heldout_01_partial_resolution",
+    "simulated": true,
+    "hard_case_type": "partial_resolution",
+    "duration_seconds": 95.0,
+    "segments": [
+      {"start": 0.0, "end": 3.5, "speaker": "agent", "text": "Hello, thank you for contacting Apex Internet. My name is Jordan. How may I help you today?"},
+      {"start": 4.0, "end": 14.0, "speaker": "customer", "text": "Hi Jordan. I have two problems. My email is bouncing and my static IP stopped working after last night's maintenance."},
+      {"start": 14.5, "end": 25.0, "speaker": "agent", "text": "I see. Let me check both issues. First I will fix the email routing table — that's corrected now. Your mail should work again."},
+      {"start": 25.5, "end": 32.0, "speaker": "customer", "text": "Oh good, yes email is back. What about the static IP? That one is critical for my business VPN."},
+      {"start": 32.5, "end": 48.0, "speaker": "agent", "text": "For the static IP reassignment I need to escalate to our network provisioning team. That ticket will take twenty-four to forty-eight hours unfortunately."},
+      {"start": 48.5, "end": 62.0, "speaker": "customer", "text": "So the email is fixed but I still cannot use my VPN until next day or even the day after. That is going to cost me real money."},
+      {"start": 63.0, "end": 75.0, "speaker": "agent", "text": "I completely understand the urgency. I have flagged it as high priority and you will receive an email update as soon as provisioning completes."},
+      {"start": 76.0, "end": 93.0, "speaker": "customer", "text": "Okay, I appreciate you fixing the email at least. I will wait for the IP ticket but I hope it is resolved quickly."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent fixed the email issue immediately but could not resolve the static IP, making the call a partial resolution with the key business-critical issue still pending.",
+      "evidence": [{"quote": "For the static IP reassignment I need to escalate to our network provisioning team.", "timestamp": 32.5}]
+    }
+  },
+  {
+    "call_id": "heldout_02_callback_promised",
+    "simulated": true,
+    "hard_case_type": "callback_promised",
+    "duration_seconds": 75.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "ProServ billing department, this is Chloe speaking."},
+      {"start": 3.5, "end": 15.0, "speaker": "customer", "text": "Hi Chloe. I received an invoice for eight hundred dollars but my contract says my monthly fee is only four hundred. This has to be a billing error."},
+      {"start": 15.5, "end": 26.0, "speaker": "agent", "text": "I can see that invoice and I agree something looks off. I am going to need to pull the contract amendment log which I cannot access from my current screen."},
+      {"start": 26.5, "end": 35.0, "speaker": "customer", "text": "So what happens now? I cannot just let an eight hundred dollar charge sit on my account."},
+      {"start": 35.5, "end": 48.0, "speaker": "agent", "text": "I am placing a billing hold on that invoice right now so it will not auto-charge. A specialist will review the contract discrepancy and call you back within two business days."},
+      {"start": 48.5, "end": 59.0, "speaker": "customer", "text": "Two business days? That is a long time. Can I get something in writing confirming the hold?"},
+      {"start": 59.5, "end": 68.0, "speaker": "agent", "text": "Absolutely. I am sending you a confirmation email right now with the hold reference number and the callback window."},
+      {"start": 68.5, "end": 74.0, "speaker": "customer", "text": "Got the email. Alright, I will wait for the callback then. Thank you for placing that hold."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent placed a billing hold and promised a specialist callback within two days but did not resolve the billing discrepancy during the call.",
+      "evidence": [{"quote": "A specialist will review the contract discrepancy and call you back within two business days.", "timestamp": 35.5}]
+    }
+  },
+  {
+    "call_id": "heldout_03_wrong_customer_auth",
+    "simulated": true,
+    "hard_case_type": "wrong_customer_authentication",
+    "duration_seconds": 68.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "SecureBank fraud line, this is Marcus."},
+      {"start": 3.0, "end": 12.0, "speaker": "customer", "text": "Yes hello, I want to dispute a charge on my checking account. My account number is 8830045."},
+      {"start": 12.5, "end": 22.0, "speaker": "agent", "text": "I can help with that. For security I need to verify your identity. Can you please confirm the last four digits of your social security number?"},
+      {"start": 22.5, "end": 28.0, "speaker": "customer", "text": "Sure, it is 4471. The account name is Patterson."},
+      {"start": 28.5, "end": 38.0, "speaker": "agent", "text": "I am sorry, the information you provided does not match our records for that account number. I cannot proceed without passing identity verification."},
+      {"start": 38.5, "end": 52.0, "speaker": "customer", "text": "Wait, let me check my card. Oh no, I may have given you my old account number by mistake. My new one ends in 0091."},
+      {"start": 52.5, "end": 60.0, "speaker": "agent", "text": "I have located that account and the details do match now. Would you like me to continue with the dispute for the charge on this account?"},
+      {"start": 60.5, "end": 67.0, "speaker": "customer", "text": "Yes please, I apologize for the confusion with the account number."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unclear",
+      "resolution_time_minutes": null,
+      "reason": "Customer provided wrong account number initially; agent correctly refused to proceed until authentication passed and then restarted the dispute process, but it was not completed on this call.",
+      "evidence": [{"quote": "I have located that account and the details do match now.", "timestamp": 52.5}]
+    }
+  },
+  {
+    "call_id": "heldout_04_language_barrier",
+    "simulated": true,
+    "hard_case_type": "language_barrier",
+    "duration_seconds": 100.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "Global Mobility support, this is Diana."},
+      {"start": 3.0, "end": 18.0, "speaker": "customer", "text": "Hello yes. I am calling for my... how to say... my phone plan. I have problem. Data not working. I am from Brazil, sorry my English is not so good."},
+      {"start": 18.5, "end": 27.0, "speaker": "agent", "text": "No problem at all, take your time. Can you tell me your phone number so I can look up your account?"},
+      {"start": 27.5, "end": 38.0, "speaker": "customer", "text": "Yes, the number is... sorry I need look my phone... it is 617-555-0192. The data, it say roaming but I am home now three weeks."},
+      {"start": 38.5, "end": 52.0, "speaker": "agent", "text": "I see your account. Your phone is still set to international roaming mode from your previous trip. I will toggle that off now and reset the data connection."},
+      {"start": 52.5, "end": 65.0, "speaker": "customer", "text": "Sorry, I not understand. You... fix it now? The internet will work now on my phone?"},
+      {"start": 65.5, "end": 75.0, "speaker": "agent", "text": "Yes, I fixed it right now. Please restart your phone and your data should work normally without extra roaming charges."},
+      {"start": 75.5, "end": 88.0, "speaker": "customer", "text": "Oh! I restart now... yes! It is working! Thank you so much. I am very happy now. Sorry again for my English."},
+      {"start": 88.5, "end": 99.0, "speaker": "agent", "text": "Your English is just fine! I am glad we got it sorted. You are all set."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 1.09,
+      "reason": "Agent patiently worked through a language barrier to identify and fix a stuck roaming mode, fully resolving the data issue.",
+      "evidence": [{"quote": "I fixed it right now. Please restart your phone and your data should work normally without extra roaming charges.", "timestamp": 65.5}]
+    }
+  },
+  {
+    "call_id": "heldout_05_hold_time_frustration",
+    "simulated": true,
+    "hard_case_type": "hold_time_frustration",
+    "duration_seconds": 110.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "HealthPlus member services, this is Ryan."},
+      {"start": 3.5, "end": 20.0, "speaker": "customer", "text": "Finally! I have been on hold for forty-five minutes. Forty-five minutes! I just want to know why my prescription was denied."},
+      {"start": 20.5, "end": 30.0, "speaker": "agent", "text": "I sincerely apologize for the wait time. That is completely unacceptable. Let me pull up your prescription denial record right away."},
+      {"start": 30.5, "end": 45.0, "speaker": "agent", "text": "I see the denial. It was flagged because your doctor submitted the prior authorization form using an outdated code. This is a fixable error."},
+      {"start": 45.5, "end": 58.0, "speaker": "customer", "text": "So I sat on hold forty-five minutes for a paperwork code error that your system caught but nobody told me or my doctor about?"},
+      {"start": 58.5, "end": 72.0, "speaker": "agent", "text": "You are absolutely right and I am so sorry. I am contacting your doctor's office right now to send the updated prior auth form. This should be re-processed within twenty-four hours."},
+      {"start": 72.5, "end": 85.0, "speaker": "customer", "text": "Fine. But someone should have called us before making me wait this long. This is a blood pressure medication. It is not optional."},
+      {"start": 85.5, "end": 99.0, "speaker": "agent", "text": "I completely agree. I have also added an expedite flag to your account so this is reviewed first thing tomorrow morning."},
+      {"start": 99.5, "end": 109.0, "speaker": "customer", "text": "Okay. I appreciate you at least sorting it out now. I hope it gets fixed tomorrow."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent identified the fixable prior-auth code error and initiated reprocessing, but the prescription was not yet approved by the end of the call.",
+      "evidence": [{"quote": "I am contacting your doctor's office right now to send the updated prior auth form.", "timestamp": 58.5}]
+    }
+  },
+  {
+    "call_id": "heldout_06_agent_self_correction",
+    "simulated": true,
+    "hard_case_type": "agent_self_correction",
+    "duration_seconds": 82.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "TechStore support, I am Felix."},
+      {"start": 3.0, "end": 14.0, "speaker": "customer", "text": "Hi Felix. I ordered a laptop last Thursday and the website says it has shipped but the tracking number you emailed does not work on FedEx."},
+      {"start": 14.5, "end": 26.0, "speaker": "agent", "text": "Let me check your order. I see order 77234 shipped on Friday. The tracking number should be 794644782500. Let me verify that... actually wait, I misread. That is not your tracking number."},
+      {"start": 26.5, "end": 35.0, "speaker": "customer", "text": "Okay, so what is the correct one?"},
+      {"start": 35.5, "end": 48.0, "speaker": "agent", "text": "My apologies for that error. The correct FedEx tracking number for your order is 794644790817. I have just re-sent the confirmation email with the corrected number."},
+      {"start": 48.5, "end": 58.0, "speaker": "customer", "text": "I got the new email. Let me try the tracking number... yes it works! Shows out for delivery today."},
+      {"start": 58.5, "end": 68.0, "speaker": "agent", "text": "Excellent! Delivery should be by end of day. I apologize for the initial confusion with the tracking number."},
+      {"start": 68.5, "end": 80.0, "speaker": "customer", "text": "No worries, thanks for catching your own mistake and fixing it quickly. Appreciate the honesty."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.59,
+      "reason": "Agent caught and corrected their own tracking number error mid-call, sent the corrected details, and the customer confirmed the order is out for delivery.",
+      "evidence": [{"quote": "The correct FedEx tracking number for your order is 794644790817.", "timestamp": 35.5}]
+    }
+  },
+  {
+    "call_id": "heldout_07_multi_issue_one_fixed",
+    "simulated": true,
+    "hard_case_type": "multi_issue_one_fixed",
+    "duration_seconds": 115.0,
+    "segments": [
+      {"start": 0.0, "end": 3.5, "speaker": "agent", "text": "Sunrise Energy customer care, this is Amara."},
+      {"start": 4.0, "end": 18.0, "speaker": "customer", "text": "Hi Amara. I have two things. First my smart thermostat lost connection to your cloud service, and second I think I was double-billed for my solar export credits last month."},
+      {"start": 18.5, "end": 30.0, "speaker": "agent", "text": "I will start with the thermostat. I can see it dropped from the cloud at 2 AM on the fourth. I am pushing a remote re-pairing command now."},
+      {"start": 30.5, "end": 40.0, "speaker": "customer", "text": "The thermostat just reconnected, the app shows it online again. Great. Now the billing issue?"},
+      {"start": 40.5, "end": 55.0, "speaker": "agent", "text": "For the solar export credits I need to request a billing audit. The export metering logs from your smart meter take forty-eight hours to pull. I cannot adjust the bill today."},
+      {"start": 55.5, "end": 68.0, "speaker": "customer", "text": "So the thermostat is fixed but the billing thing is still up in the air? How much are we talking about if I was double-billed?"},
+      {"start": 68.5, "end": 80.0, "speaker": "agent", "text": "It could be up to sixty dollars if the export credits were applied twice. I have opened audit ticket SR-4492 and you will be notified by email within seventy-two hours."},
+      {"start": 80.5, "end": 95.0, "speaker": "customer", "text": "Okay. I am glad the thermostat is sorted. Sixty dollars is not nothing so please make sure that audit goes through."},
+      {"start": 95.5, "end": 113.0, "speaker": "agent", "text": "Absolutely, I have escalated it as a priority billing dispute. You will hear back before end of week."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "The thermostat reconnection issue was fixed immediately but the double-billing dispute requires a 48-hour audit and could not be resolved on the call.",
+      "evidence": [{"quote": "For the solar export credits I need to request a billing audit.", "timestamp": 40.5}]
+    }
+  },
+  {
+    "call_id": "heldout_08_hold_time_abandoned",
+    "simulated": true,
+    "hard_case_type": "hold_time_frustration",
+    "duration_seconds": 65.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "CloudDrive support, this is Priya."},
+      {"start": 3.0, "end": 18.0, "speaker": "customer", "text": "Hi Priya. I have been waiting for thirty minutes. I just want to reset my two-factor authentication because I got a new phone and I am completely locked out of my work account."},
+      {"start": 18.5, "end": 29.0, "speaker": "agent", "text": "I understand that is urgent. I need to verify your identity before resetting two-factor. Can you provide your employee ID and the email address on file?"},
+      {"start": 29.5, "end": 38.0, "speaker": "customer", "text": "My employee ID is E10394 and my work email is t.wright at datacore dot io."},
+      {"start": 38.5, "end": 50.0, "speaker": "agent", "text": "Those match. I have reset your two-factor authentication. You will receive a text message to your new phone within two minutes with the setup link."},
+      {"start": 50.5, "end": 60.0, "speaker": "customer", "text": "Got the text. Setting up now... it is working. Thank goodness. That thirty-minute wait was rough but you sorted it quickly."},
+      {"start": 60.5, "end": 64.0, "speaker": "agent", "text": "I am glad we got you back in. I apologize again for the wait time."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.63,
+      "reason": "Despite long hold-time frustration, agent quickly verified identity and reset two-factor authentication, fully restoring account access.",
+      "evidence": [{"quote": "I have reset your two-factor authentication.", "timestamp": 38.5}]
+    }
+  },
+  {
+    "call_id": "heldout_09_partial_refund_dispute",
+    "simulated": true,
+    "hard_case_type": "partial_resolution",
+    "duration_seconds": 90.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "RetailMax returns center, Kenji speaking. How can I help?"},
+      {"start": 3.5, "end": 16.0, "speaker": "customer", "text": "I returned a treadmill three weeks ago and I only got a partial refund. I paid 1200 dollars but I only got 900 back. That 300 dollar gap is not explained anywhere."},
+      {"start": 16.5, "end": 30.0, "speaker": "agent", "text": "I see your return on file. The 300 dollar deduction is a restocking fee applied because the packaging was opened and the belt showed minor use marks under the return policy."},
+      {"start": 30.5, "end": 42.0, "speaker": "customer", "text": "That is ridiculous. I used it for two days and the motor made a grinding sound so I returned it. A defective product should not have a restocking fee."},
+      {"start": 42.5, "end": 55.0, "speaker": "agent", "text": "That is a very fair point. If the product was defective the restocking fee should be waived. I am going to escalate this to our quality returns team with a defective product flag."},
+      {"start": 55.5, "end": 68.0, "speaker": "customer", "text": "So am I getting the 300 dollars back or not? I need a clear answer."},
+      {"start": 68.5, "end": 80.0, "speaker": "agent", "text": "I cannot approve the refund myself but the quality team should contact you within five business days and if the defect is confirmed the 300 will be refunded."},
+      {"start": 80.5, "end": 89.0, "speaker": "customer", "text": "Fine. Five days. But if they try to deny it again I am disputing with my credit card company."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent correctly flagged the defective-product exception but could not authorize the 300 dollar restocking fee refund, leaving the customer frustrated and threatening a chargeback.",
+      "evidence": [{"quote": "I cannot approve the refund myself but the quality team should contact you within five business days.", "timestamp": 68.5}]
+    }
+  },
+  {
+    "call_id": "heldout_10_callback_fulfilled",
+    "simulated": true,
+    "hard_case_type": "callback_promised",
+    "duration_seconds": 55.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "FlexNet outage response, this is Samantha."},
+      {"start": 3.0, "end": 12.0, "speaker": "customer", "text": "Hi. I called yesterday about my fiber being down and was promised a callback within four hours. It has now been eighteen hours and nobody called me."},
+      {"start": 12.5, "end": 24.0, "speaker": "agent", "text": "I sincerely apologize for the missed callback. I can see your case in the system. The outage in your area was resolved at 6 AM this morning. Is your service working now?"},
+      {"start": 24.5, "end": 33.0, "speaker": "customer", "text": "Actually yes, it came back this morning. But I still did not get a callback and I had to work offline all day yesterday."},
+      {"start": 33.5, "end": 45.0, "speaker": "agent", "text": "We failed to call you back as promised, and that is on us. I am applying a twenty dollar service credit to your next bill for the downtime inconvenience."},
+      {"start": 45.5, "end": 53.0, "speaker": "customer", "text": "Okay, thank you for the credit. The internet is working now so I suppose we are good."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.58,
+      "reason": "Service had already been restored before the callback call; agent confirmed resolution and applied a service credit for the missed callback promise.",
+      "evidence": [{"quote": "I am applying a twenty dollar service credit to your next bill for the downtime inconvenience.", "timestamp": 33.5}]
+    }
+  },
+  {
+    "call_id": "heldout_11_multi_issue_both_fixed",
+    "simulated": true,
+    "hard_case_type": "multi_issue_one_fixed",
+    "duration_seconds": 98.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "SmartHome support, this is Luis."},
+      {"start": 3.0, "end": 16.0, "speaker": "customer", "text": "Hi Luis. My smart doorbell camera stopped recording at night and my smart lock keeps showing offline in the app even though it locks and unlocks fine."},
+      {"start": 16.5, "end": 30.0, "speaker": "agent", "text": "Let me check the camera first. I can see the night vision mode was disabled by the last firmware update. I have re-enabled it remotely and pushed a settings sync."},
+      {"start": 30.5, "end": 40.0, "speaker": "customer", "text": "The camera app now shows night recording is on. Does that mean it is fixed?"},
+      {"start": 40.5, "end": 52.0, "speaker": "agent", "text": "Yes it should record tonight. Now for the smart lock, the offline status is a known display bug in app version 3.1. Updating the app to 3.2 will fix the status indicator."},
+      {"start": 52.5, "end": 62.0, "speaker": "customer", "text": "Updating now... okay it is at 3.2. And yes the lock shows online and green in the app now."},
+      {"start": 62.5, "end": 74.0, "speaker": "agent", "text": "Both issues are resolved. The camera will record at night and the lock status will display correctly going forward."},
+      {"start": 74.5, "end": 97.0, "speaker": "customer", "text": "That was easier than I expected. Thank you for sorting both of them out so quickly Luis."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 1.04,
+      "reason": "Agent resolved both the camera night-vision disable and the smart-lock display bug within the same call with no unresolved issues remaining.",
+      "evidence": [{"quote": "Both issues are resolved.", "timestamp": 62.5}]
+    }
+  },
+  {
+    "call_id": "heldout_12_agent_self_correction_wrong_plan",
+    "simulated": true,
+    "hard_case_type": "agent_self_correction",
+    "duration_seconds": 88.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "MobileOne plan changes, this is Daria."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi. I called last week and the agent switched me to the sixty dollar unlimited plan but my bill this month shows eighty dollars."},
+      {"start": 12.5, "end": 25.0, "speaker": "agent", "text": "Let me review the account notes. I see the change was applied... wait, I am reading the wrong account tier. Let me re-check. Ah, the previous agent applied the premium eighty dollar plan, not the sixty dollar one. That was our error."},
+      {"start": 25.5, "end": 34.0, "speaker": "customer", "text": "So I was put on the wrong plan and charged twenty dollars more than I agreed to?"},
+      {"start": 34.5, "end": 48.0, "speaker": "agent", "text": "That is correct and I apologize. I am switching you to the sixty dollar plan right now effective today, and I am issuing a twenty dollar credit to correct this month's overcharge."},
+      {"start": 48.5, "end": 58.0, "speaker": "customer", "text": "Okay. So next month I will see sixty dollars plus the twenty credit applied?"},
+      {"start": 58.5, "end": 68.0, "speaker": "agent", "text": "Exactly. Your next bill will be forty dollars reflecting the plan correction and the credit. I have confirmed both changes in the system."},
+      {"start": 68.5, "end": 86.0, "speaker": "customer", "text": "Alright, thank you for catching that and fixing it. I just hope this does not happen again."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.58,
+      "reason": "Agent self-corrected after initially reading the wrong account tier, identified the previous agent error, applied the correct plan, and issued a credit for the overcharge.",
+      "evidence": [{"quote": "I am switching you to the sixty dollar plan right now effective today, and I am issuing a twenty dollar credit to correct this month's overcharge.", "timestamp": 34.5}]
+    }
+  },
+  {
+    "call_id": "heldout_13_language_barrier_unresolved",
+    "simulated": true,
+    "hard_case_type": "language_barrier",
+    "duration_seconds": 80.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "Meridian insurance claims, I am Owen."},
+      {"start": 3.0, "end": 18.0, "speaker": "customer", "text": "Yes hello. I need to make... uh... I have accident with my car. I want to... how to say... make the claim. Sorry I not speak English very good."},
+      {"start": 18.5, "end": 30.0, "speaker": "agent", "text": "I understand you want to file a car accident claim. Do you have your policy number handy?"},
+      {"start": 30.5, "end": 45.0, "speaker": "customer", "text": "Yes I have it... MP... wait this is credit card. One moment please. I look in email. I cannot find it now."},
+      {"start": 45.5, "end": 58.0, "speaker": "agent", "text": "No problem. Can I look it up by your name and date of birth instead?"},
+      {"start": 58.5, "end": 72.0, "speaker": "customer", "text": "My name is... Luciana Ferriera. Born twelve March nineteen eighty-five. In Europe format it is twelve-three-eighty-five."},
+      {"start": 72.5, "end": 79.0, "speaker": "agent", "text": "I have found your policy. Unfortunately to file a full claim I need a police report number which you would get from the accident report. Do you have that?"}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unclear",
+      "resolution_time_minutes": null,
+      "reason": "Agent located the policy but could not complete the claim without a police report number, and the call ended without enough information to file.",
+      "evidence": [{"quote": "to file a full claim I need a police report number which you would get from the accident report.", "timestamp": 72.5}]
+    }
+  },
+  {
+    "call_id": "heldout_14_wrong_auth_lockout",
+    "simulated": true,
+    "hard_case_type": "wrong_customer_authentication",
+    "duration_seconds": 72.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Nexus account security, I am Hugo."},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "Hi. My account has been locked. I have tried the self-service reset three times and it just loops back. I need someone to unlock it manually."},
+      {"start": 14.5, "end": 25.0, "speaker": "agent", "text": "I can help with a manual unlock. To protect your account I need to ask a few verification questions. What is your mother's maiden name as registered on the account?"},
+      {"start": 25.5, "end": 30.0, "speaker": "customer", "text": "It should be Calderon."},
+      {"start": 30.5, "end": 40.0, "speaker": "agent", "text": "That does not match. I have one more question. What was the first street address you registered with us?"},
+      {"start": 40.5, "end": 48.0, "speaker": "customer", "text": "Twelve Maple Avenue. Wait, or was it Elm? I moved a lot. Try Twelve Elm Street."},
+      {"start": 48.5, "end": 60.0, "speaker": "agent", "text": "I am sorry, neither answer matches our records. I cannot unlock the account over the phone for security reasons. You will need to visit a branch with a government-issued photo ID."},
+      {"start": 60.5, "end": 70.0, "speaker": "customer", "text": "That is really inconvenient but I understand you cannot just give access without verification. Which branch is closest to zip code 02115?"}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Customer failed two security questions so the agent correctly declined to unlock the account remotely and directed them to an in-person branch visit.",
+      "evidence": [{"quote": "I cannot unlock the account over the phone for security reasons.", "timestamp": 48.5}]
+    }
+  },
+  {
+    "call_id": "heldout_15_hold_frustration_abandoned",
+    "simulated": true,
+    "hard_case_type": "hold_time_frustration",
+    "duration_seconds": 50.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "ValueAir reservations, this is Tomas."},
+      {"start": 3.0, "end": 16.0, "speaker": "customer", "text": "I have been on hold for an hour. An hour! I need to change my flight for tomorrow because there is a family emergency. Can you please just help me quickly?"},
+      {"start": 16.5, "end": 28.0, "speaker": "agent", "text": "I am so sorry for the wait. Absolutely, I can change your flight. Can you give me your booking reference?"},
+      {"start": 28.5, "end": 35.0, "speaker": "customer", "text": "It is VAX8821. I need to move from the 10 AM to either the 6 AM or the noon flight tomorrow."},
+      {"start": 35.5, "end": 46.0, "speaker": "agent", "text": "I have your booking. The 6 AM is sold out but the noon flight has availability. I can move you at no change fee given the family emergency circumstances."},
+      {"start": 46.5, "end": 49.0, "speaker": "customer", "text": "Yes please, noon is perfect. Thank you so much."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.58,
+      "reason": "Despite extreme hold-time frustration, agent waived the change fee and moved the customer to the noon flight, fully resolving the emergency rebooking.",
+      "evidence": [{"quote": "I can move you at no change fee given the family emergency circumstances.", "timestamp": 35.5}]
+    }
+  },
+  {
+    "call_id": "heldout_16_multi_issue_none_fixed",
+    "simulated": true,
+    "hard_case_type": "multi_issue_one_fixed",
+    "duration_seconds": 105.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Metro Water billing, this is Sharon."},
+      {"start": 3.5, "end": 18.0, "speaker": "customer", "text": "Hi Sharon. I have two issues. My bill this month is triple the normal amount, and a new service fee appeared that I have never seen before and nobody told me about."},
+      {"start": 18.5, "end": 32.0, "speaker": "agent", "text": "Let me pull up your account. The high bill is flagged for a meter reading audit, which typically takes five to seven business days. I cannot adjust it until the audit completes."},
+      {"start": 32.5, "end": 45.0, "speaker": "customer", "text": "What about the mystery service fee? What even is that?"},
+      {"start": 45.5, "end": 60.0, "speaker": "agent", "text": "That is a new infrastructure maintenance levy added by the city council last month. All accounts in your district received it. I do not have authority to waive it."},
+      {"start": 60.5, "end": 75.0, "speaker": "customer", "text": "So I have a potentially wrong triple bill that you cannot fix for a week, plus a new fee nobody told me about that you also cannot remove. What exactly can you do?"},
+      {"start": 75.5, "end": 88.0, "speaker": "agent", "text": "I can place a payment hold on your account so nothing auto-charges while the meter audit is pending. The new levy unfortunately is non-negotiable as it is a city mandate."},
+      {"start": 88.5, "end": 103.0, "speaker": "customer", "text": "Put the hold on. This is really frustrating. Neither problem is actually solved today."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent placed a payment hold but neither the high bill nor the new fee was resolved during the call, leaving the customer frustrated.",
+      "evidence": [{"quote": "I can place a payment hold on your account so nothing auto-charges while the meter audit is pending.", "timestamp": 75.5}]
+    }
+  },
+  {
+    "call_id": "heldout_17_callback_agent_self_correct",
+    "simulated": true,
+    "hard_case_type": "agent_self_correction",
+    "duration_seconds": 78.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "GigaCloud technical support, this is Elena."},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "Hi. I got a callback from your team but the agent told me to reinstall the app to fix my sync issue. I did it and now I lost all my local drafts. They are gone."},
+      {"start": 14.5, "end": 26.0, "speaker": "agent", "text": "I am so sorry that happened. Reinstalling should not remove drafts — they should sync from the cloud backup. Let me check if your drafts folder still exists on our servers."},
+      {"start": 26.5, "end": 38.0, "speaker": "agent", "text": "I can see your drafts folder on the server side. They were not deleted. The reinstall disconnected the local sync. I will re-link your account to that folder now."},
+      {"start": 38.5, "end": 50.0, "speaker": "customer", "text": "My drafts folder is showing up again in the app! All thirty-two drafts are there. Oh thank goodness."},
+      {"start": 50.5, "end": 62.0, "speaker": "agent", "text": "I also want to note that the previous agent gave you incorrect instructions. Reinstalling was not necessary for a sync issue. I am filing an internal feedback report for that."},
+      {"start": 62.5, "end": 76.0, "speaker": "customer", "text": "I appreciate you being honest about that. I am just relieved my work is not lost. Thank you Elena."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.64,
+      "reason": "Agent recovered the drafts by relinking the cloud sync, acknowledged the previous agent error, and filed internal feedback, fully resolving the issue.",
+      "evidence": [{"quote": "I will re-link your account to that folder now.", "timestamp": 26.5}]
+    }
+  },
+  {
+    "call_id": "heldout_18_partial_resolution_shipping",
+    "simulated": true,
+    "hard_case_type": "partial_resolution",
+    "duration_seconds": 88.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "OrderHub customer care, I am Derek."},
+      {"start": 3.0, "end": 16.0, "speaker": "customer", "text": "Hi. I ordered three items in one package. The box arrived but one item is missing and one item arrived broken. The third one is fine."},
+      {"start": 16.5, "end": 28.0, "speaker": "agent", "text": "I am sorry about that. For the broken item I can process an immediate replacement shipment — that will arrive in two days. Which item was broken?"},
+      {"start": 28.5, "end": 35.0, "speaker": "customer", "text": "The ceramic mug. The replacement would be great. What about the missing headphones?"},
+      {"start": 35.5, "end": 50.0, "speaker": "agent", "text": "The headphones show as shipped in the same package. We need to open a trace with the carrier for the missing item. That investigation takes three to five business days."},
+      {"start": 50.5, "end": 62.0, "speaker": "customer", "text": "So the mug replacement is coming in two days but the headphones might take a week or more to sort out?"},
+      {"start": 62.5, "end": 74.0, "speaker": "agent", "text": "That is correct. If the carrier trace confirms the headphones were lost we will ship a replacement immediately. I have initiated both the mug replacement and the carrier trace."},
+      {"start": 74.5, "end": 87.0, "speaker": "customer", "text": "Okay. At least the mug is coming quickly. The headphones situation is frustrating but I understand it takes time to investigate."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "The broken mug replacement was dispatched immediately but the missing headphones require a carrier trace that could take up to five days to resolve.",
+      "evidence": [{"quote": "the headphones might take a week or more to sort out", "timestamp": 50.5}]
+    }
+  },
+  {
+    "call_id": "heldout_19_wrong_auth_resolved_in_branch",
+    "simulated": true,
+    "hard_case_type": "wrong_customer_authentication",
+    "duration_seconds": 62.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "PrimeFin card services, I am Tobias."},
+      {"start": 3.0, "end": 14.0, "speaker": "customer", "text": "Hi Tobias. My card got blocked while I was traveling and I need it unblocked. I am at the airport right now and cannot pay for anything."},
+      {"start": 14.5, "end": 26.0, "speaker": "agent", "text": "I can try to unblock your card. First I need to verify your identity. Can you confirm the full card number, expiry, and the name printed on the card?"},
+      {"start": 26.5, "end": 38.0, "speaker": "customer", "text": "Card is 4532 0151 1283 0366, expiry 03-28, name is Adrian Kovacs."},
+      {"start": 38.5, "end": 50.0, "speaker": "agent", "text": "The card number and expiry match. I see the block was triggered by a foreign transaction flag. I have removed the travel block. Your card should work now."},
+      {"start": 50.5, "end": 60.0, "speaker": "customer", "text": "Let me try it at the coffee shop here... it worked! Thank you so much Tobias, you just saved me at the airport."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.64,
+      "reason": "Agent verified identity with card details, identified a travel block, removed it immediately, and customer confirmed the card works.",
+      "evidence": [{"quote": "I have removed the travel block. Your card should work now.", "timestamp": 38.5}]
+    }
+  },
+  {
+    "call_id": "heldout_20_language_barrier_partial",
+    "simulated": true,
+    "hard_case_type": "language_barrier",
+    "duration_seconds": 92.0,
+    "segments": [
+      {"start": 0.0, "end": 2.5, "speaker": "agent", "text": "Urban Utilities, this is Grace."},
+      {"start": 3.0, "end": 18.0, "speaker": "customer", "text": "Hello. I speak little English. I have problem with... the hot water. No hot water in my apartment. Two days now. I am in building 14 in apartment 302."},
+      {"start": 18.5, "end": 30.0, "speaker": "agent", "text": "I understand, no hot water for two days. That is urgent. Can I have your account number or the name on the account?"},
+      {"start": 30.5, "end": 44.0, "speaker": "customer", "text": "The name is... Miroslava Horvatova. I not sure account number. Maybe my husband knows but he is working now."},
+      {"start": 44.5, "end": 58.0, "speaker": "agent", "text": "I found the account by address. There is a known boiler fault affecting your building since yesterday. The repair crew is scheduled for this afternoon between two and five PM."},
+      {"start": 58.5, "end": 72.0, "speaker": "customer", "text": "So today afternoon they come? Two to five? Okay I understand. I wait at home. Thank you Grace, I understand now what happen."},
+      {"start": 72.5, "end": 91.0, "speaker": "agent", "text": "Yes, two to five PM today. If they do not arrive by five please call us back and we will escalate. I am adding a priority note to your account right now."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent identified a known building boiler fault and communicated the afternoon repair window, but the hot water was not restored during the call.",
+      "evidence": [{"quote": "The repair crew is scheduled for this afternoon between two and five PM.", "timestamp": 44.5}]
+    }
+  }
+]

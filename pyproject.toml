@@ -9,7 +9,7 @@ description = "Local call-center audio insights pipeline: transcription, PII red
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
-    { name = "Portfolio Project" }
+    { name = "Osman Yildiz" }
 ]
 dependencies = [
     "faster-whisper>=1.0.0",
@@ -39,4 +39,6 @@ include = ["callinsight*", "evals*"]
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
-
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]

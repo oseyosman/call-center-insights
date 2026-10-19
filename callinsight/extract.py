@@ -4,6 +4,9 @@ Providers:
 - baseline (default, offline): VADER sentiment on customer segments + keyword rules.
 - ollama: local open-source model via http://localhost:11434 with JSON-schema format.
 - anthropic: Claude API via forced tool use.
+
+⚠️  SIMULATED DATA WARNING: Demo and evaluation transcripts are synthetic/simulated.
+    No real personal data is ever passed to any provider.
 """
 
 import json
@@ -30,7 +33,14 @@ from callinsight.timing import calculate_resolution_time, compute_call_duration,
 def verify_grounding(evidence: List[EvidenceItem], transcript_text: str) -> Tuple[bool, List[str]]:
     """Grounding check: verify that every evidence quote appears in the transcript.
 
-    Quotes are checked using normalized whitespace and case-insensitive substring search.
+    Grounding rules (applied in order):
+    1. Normalised direct substring match – the entire normalised quote must appear
+       as a substring of the normalised transcript.  Punctuation and case are ignored.
+    2. Short quotes (< 4 words) that fail rule 1 are immediately ungrounded.
+    3. Longer quotes (≥ 4 words) that fail rule 1 are allowed only if ≥ 80 % of
+       their 4-gram windows appear IN ORDER within the transcript. A single matching
+       4-gram is NOT enough (fixes the original bug).
+
     Returns (is_grounded, list_of_ungrounded_quotes).
     """
     if not evidence:
@@ -43,22 +53,28 @@ def verify_grounding(evidence: List[EvidenceItem], transcript_text: str) -> Tupl
         norm_quote = normalize_text_for_search(item.quote)
         if not norm_quote:
             continue
-        # Check if normalized quote is in normalized transcript
-        if norm_quote not in norm_transcript:
-            # Also check if at least 80% contiguous words appear (in case of slight punctuation/split)
-            quote_words = norm_quote.split()
-            if len(quote_words) >= 4:
-                # Check 4-word sliding window
-                found_match = False
-                for i in range(len(quote_words) - 3):
-                    ngram = " ".join(quote_words[i:i+4])
-                    if ngram in norm_transcript:
-                        found_match = True
-                        break
-                if not found_match:
-                    ungrounded.append(item.quote)
-            else:
+
+        # Rule 1: full normalised substring match
+        if norm_quote in norm_transcript:
+            continue
+
+        # Rule 2 / 3: fallback for longer quotes
+        quote_words = norm_quote.split()
+        if len(quote_words) >= 4:
+            windows = [" ".join(quote_words[i:i + 4]) for i in range(len(quote_words) - 3)]
+            # Ordered search: scan transcript left-to-right
+            pos = 0
+            matched_windows = 0
+            for w in windows:
+                idx = norm_transcript.find(w, pos)
+                if idx != -1:
+                    matched_windows += 1
+                    pos = idx  # advance but allow overlaps
+            if matched_windows / len(windows) < 0.80:
                 ungrounded.append(item.quote)
+        else:
+            # Short quote failed direct match – ungrounded
+            ungrounded.append(item.quote)
 
     is_grounded = len(ungrounded) == 0
     return is_grounded, ungrounded
@@ -77,7 +93,12 @@ class BaseExtractor(ABC):
 
 
 class BaselineExtractor(BaseExtractor):
-    """Offline reference baseline using VADER sentiment and simple keyword rules."""
+    """Offline reference baseline using VADER sentiment and simple keyword rules.
+
+    NOTE: The baseline copies quotes verbatim from segments, so its grounding
+    rate is trivially 100%.  That number only has meaning for LLM providers
+    that must generate quotes from memory.
+    """
 
     def __init__(self):
         self.vader = SentimentIntensityAnalyzer()
@@ -107,6 +128,10 @@ class BaselineExtractor(BaseExtractor):
 
         # Filter customer segments for sentiment
         customer_segments = [s for s in segments if s.speaker == "customer"]
+        all_inferred = not customer_segments
+
+        # Bug 5 fix: when no customer-labeled segments exist, use all segments
+        # but annotate the reason clearly.
         if not customer_segments:
             customer_segments = segments
 
@@ -125,7 +150,7 @@ class BaselineExtractor(BaseExtractor):
 
         # Keyword heuristics for resolution and agent handling
         full_text_lower = " ".join(s.text.lower() for s in segments)
-        last_half = " ".join(s.text.lower() for s in segments[len(segments)//2:])
+        last_half = " ".join(s.text.lower() for s in segments[len(segments) // 2:])
 
         resolved_keywords = [
             "fixed", "resolved", "solved", "working now", "sorted out",
@@ -173,6 +198,10 @@ class BaselineExtractor(BaseExtractor):
             f"Baseline rule classified resolution as {resolution} with customer sentiment shifting "
             f"from {sentiment_start} to {sentiment_end}."
         )
+
+        # Bug 5 fix: annotate mono/inferred audio in the reason field
+        if all_inferred:
+            reason += " (speaker attribution inferred; sentiment computed on all speech)"
 
         extraction = CallExtractionSchema(
             customer_sentiment_start=sentiment_start,
@@ -267,7 +296,8 @@ class AnthropicExtractor(BaseExtractor):
         self.api_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
         if not self.api_key:
             raise ValueError("ANTHROPIC_API_KEY environment variable is required for AnthropicExtractor.")
-        self.model = model or os.environ.get("CALL_ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022")
+        # Bug 7: default changed from stale claude-3-5-sonnet-20241022 to claude-sonnet-5-5
+        self.model = model or os.environ.get("CALL_ANTHROPIC_MODEL", "claude-sonnet-5-5")
 
     def _build_prompt(self, segments: List[Segment]) -> str:
         lines = []
@@ -312,23 +342,60 @@ class AnthropicExtractor(BaseExtractor):
             )
 
         messages = [{"role": "user", "content": prompt}]
+        resp = None
         try:
             resp = _call_claude(messages)
             tool_input = None
+            tool_use_block = None
             for block in resp.content:
                 if block.type == "tool_use" and block.name == "record_call_insights":
                     tool_input = block.input
+                    tool_use_block = block
                     break
             if tool_input is None:
                 raise ValueError("Anthropic API did not return tool_use content block.")
             extraction = CallExtractionSchema.model_validate(tool_input)
         except Exception as first_err:
-            # Retry once
-            messages.append({"role": "assistant", "content": str(resp.content) if "resp" in locals() else ""})
-            messages.append({
-                "role": "user",
-                "content": f"The previous tool call failed validation: {str(first_err)}. Please call record_call_insights with valid arguments strictly matching the schema."
-            })
+            # Bug 7 fix: build a proper Anthropic multi-turn retry with real content blocks
+            # The assistant turn must contain the actual content blocks from the response,
+            # and we must add a tool_result for the failed tool_use block.
+            if resp is not None and resp.content:
+                assistant_content = [b.model_dump() for b in resp.content]
+                # Find the tool_use block id for the tool_result
+                tool_use_id = None
+                for b in resp.content:
+                    if b.type == "tool_use":
+                        tool_use_id = b.id
+                        break
+                messages.append({"role": "assistant", "content": assistant_content})
+                if tool_use_id:
+                    messages.append({
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "tool_result",
+                                "tool_use_id": tool_use_id,
+                                "content": f"Validation error: {str(first_err)}",
+                                "is_error": True,
+                            },
+                            {
+                                "type": "text",
+                                "text": "Please call record_call_insights again with valid arguments strictly matching the schema.",
+                            }
+                        ]
+                    })
+                else:
+                    messages.append({
+                        "role": "user",
+                        "content": f"The previous tool call failed validation: {str(first_err)}. Please call record_call_insights with valid arguments strictly matching the schema."
+                    })
+            else:
+                messages.append({"role": "assistant", "content": ""})
+                messages.append({
+                    "role": "user",
+                    "content": f"The previous tool call failed validation: {str(first_err)}. Please call record_call_insights with valid arguments strictly matching the schema."
+                })
+
             resp = _call_claude(messages)
             tool_input = None
             for block in resp.content:
@@ -346,6 +413,28 @@ class AnthropicExtractor(BaseExtractor):
         }
 
         return extraction, {"provider": f"anthropic ({self.model})", "latency_seconds": round(latency, 4), "tokens": tokens}
+
+
+class FakeExtractor(BaseExtractor):
+    """Test-only extractor that always returns a fabricated (hallucinated) quote.
+
+    Used to verify that analyze_transcript correctly flags grounded=False when
+    the evidence quote does not appear in the transcript.
+    """
+
+    def extract(self, segments: List[Segment]) -> Tuple[CallExtractionSchema, Dict[str, Any]]:
+        extraction = CallExtractionSchema(
+            customer_sentiment_start="neutral",
+            customer_sentiment_end="neutral",
+            agent_handled_well=True,
+            resolution="resolved",
+            reason="Fake extractor always invents quotes for testing purposes.",
+            evidence=[EvidenceItem(
+                quote="This fabricated quote never appeared in the original transcript at all.",
+                timestamp=0.0
+            )]
+        )
+        return extraction, {"provider": "fake", "latency_seconds": 0.0, "tokens": None}
 
 
 def get_extractor(provider_name: Optional[str] = None) -> BaseExtractor:
@@ -368,6 +457,7 @@ def analyze_transcript(
     call_id: str,
     segments: List[Segment],
     provider: Optional[str] = None,
+    extractor: Optional[BaseExtractor] = None,
     is_stereo: bool = False,
     speaker_diarization_confidence: float = 1.0,
     audio_file: Optional[str] = None,
@@ -376,10 +466,14 @@ def analyze_transcript(
     """Run full analysis pipeline on transcript segments:
 
     1. Redact PII from segments.
-    2. Run extractor (baseline / ollama / anthropic).
+    2. Run extractor (baseline / ollama / anthropic / custom).
     3. Perform grounding verification on evidence quotes.
     4. Compute call duration and resolution time.
     5. Return validated CallAnalysisResult.
+
+    Args:
+        extractor: If provided, overrides the `provider` string lookup.
+                   Used for dependency-injection in tests (e.g. FakeExtractor).
     """
     # 1. PII Redaction
     raw_seg_dicts = [s.model_dump() for s in segments]
@@ -390,8 +484,8 @@ def analyze_transcript(
     full_transcript = " ".join(s.text for s in redacted_segments)
 
     # 2. Extraction
-    extractor = get_extractor(provider)
-    extraction, meta = extractor.extract(redacted_segments)
+    ext = extractor if extractor is not None else get_extractor(provider)
+    extraction, meta = ext.extract(redacted_segments)
 
     # 3. Grounding Check
     is_grounded, ungrounded_quotes = verify_grounding(extraction.evidence, full_transcript)
