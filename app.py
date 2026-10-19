@@ -9,54 +9,7 @@ import os
 import pandas as pd
 import streamlit as st
 
-# Configure page
-st.set_page_config(
-    page_title="Call Center Insights | Local QA Analytics",
-    page_icon="📞",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 
-# Custom Styling
-st.markdown("""
-<style>
-    .reportview-container {
-        background: #0e1117;
-    }
-    .metric-card {
-        background-color: #1e222d;
-        border: 1px solid #2e3440;
-        border-radius: 8px;
-        padding: 18px;
-        margin-bottom: 12px;
-    }
-    .badge-simulated {
-        background-color: #e67e22;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        display: inline-block;
-    }
-    .quote-box {
-        background-color: #262c3a;
-        border-left: 4px solid #3498db;
-        padding: 10px 14px;
-        margin: 6px 0;
-        border-radius: 0 6px 6px 0;
-        font-family: monospace;
-    }
-    .grounded-tag {
-        color: #2ecc71;
-        font-weight: bold;
-    }
-    .ungrounded-tag {
-        color: #e74c3c;
-        font-weight: bold;
-    }
-</style>
-""", unsafe_allow_html=True)
 
 
 def load_data():
@@ -98,6 +51,53 @@ def load_data():
 
 
 def main():
+    st.set_page_config(
+        page_title="Call Center Insights | Local QA Analytics",
+        page_icon="📞",
+        layout="wide",
+        initial_sidebar_state="expanded",
+    )
+
+    st.markdown("""
+    <style>
+        .reportview-container {
+            background: #0e1117;
+        }
+        .metric-card {
+            background-color: #1e222d;
+            border: 1px solid #2e3440;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 12px;
+        }
+        .badge-simulated {
+            background-color: #e67e22;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .quote-box {
+            background-color: #262c3a;
+            border-left: 4px solid #3498db;
+            padding: 10px 14px;
+            margin: 6px 0;
+            border-radius: 0 6px 6px 0;
+            font-family: monospace;
+        }
+        .grounded-tag {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        .ungrounded-tag {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
     st.title("📞 Call Center Insights Local QA Analytics")
     st.markdown('<span class="badge-simulated">SIMULATED DATASET</span> *All bundled evaluation and demo data are strictly synthetic/simulated.*', unsafe_allow_html=True)
     st.write("")
@@ -176,7 +176,8 @@ def main():
             col_b.write(f"**Resolution Time:** `{call_row['resolution_time_minutes']} min`")
             col_c.write(f"**Agent Handled Well:** `{call_row['agent_handled_well']}`")
             is_gr = call_row['grounded']
-            col_c.write(f"**Grounding:** {'<span class=\"grounded-tag\">✓ Grounded</span>' if is_gr else '<span class=\"ungrounded-tag\">✗ Ungrounded</span>'}", unsafe_allow_html=True)
+            grounding_tag = '<span class="grounded-tag">✓ Grounded</span>' if is_gr else '<span class="ungrounded-tag">✗ Ungrounded</span>'
+            col_c.write(f"**Grounding:** {grounding_tag}", unsafe_allow_html=True)
 
             st.markdown(f"**Reason:** *{call_row.get('reason', 'N/A')}*")
 
@@ -196,4 +197,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if not st.runtime.exists():
+        import sys
+        from streamlit.web import cli as stcli
+        sys.argv = ["streamlit", "run", __file__]
+        sys.exit(stcli.main())
+    else:
+        main()
