@@ -2,7 +2,7 @@
 
 > **SIMULATED DATA NOTICE**: All metrics, transcripts, and audio files are synthetic and simulated for QA testing.
 
-- **Evaluated Date**: 2026-10-19 02:31:40 UTC
+- **Evaluated Date**: 2026-10-19 02:38:08 UTC
 - **Total Calls**: 20
 - **Provider**: `baseline`
 
@@ -14,7 +14,7 @@
 | Resolution Accuracy | 65.0% | Evaluated on 3-class problem |
 | Evidence Grounding Rate | 100.0% | Verbatim transcript match |
 | Resolution-Time MAE | 0.264 min | Evaluated on 9 calls |
-| Latency (Mean / P95) | 0.0047s / 0.0056s | Per-call latency |
+| Latency (Mean / P95) | 0.0043s / 0.0053s | Per-call latency |
 
 ## Resolution Confusion Matrix
 | True \ Pred | resolved | unresolved | unclear |

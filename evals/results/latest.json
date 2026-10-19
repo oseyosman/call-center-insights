@@ -4,7 +4,7 @@
     "provider": "baseline",
     "split": "dev",
     "total_calls": 20,
-    "timestamp": "2026-10-19 02:31:40 UTC"
+    "timestamp": "2026-10-19 02:38:08 UTC"
   },
   "sentiment_start": {
     "accuracy_percent": 50.0,
@@ -43,8 +43,8 @@
   },
   "audio_transcription": {},
   "performance": {
-    "mean_latency_seconds": 0.0047,
-    "p95_latency_seconds": 0.0056,
+    "mean_latency_seconds": 0.0043,
+    "p95_latency_seconds": 0.0053,
     "total_prompt_tokens": null,
     "total_eval_tokens": null
   },
