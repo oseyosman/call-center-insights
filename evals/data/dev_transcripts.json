@@ -1,0 +1,454 @@
+[
+  {
+    "call_id": "dev_01_customer_calms_down",
+    "simulated": true,
+    "hard_case_type": "customer_calms_down",
+    "duration_seconds": 65.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Thank you for calling Acme Telecom. My name is Alex. How can I help you today?"},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "I am furious! My internet has been cutting out all morning and I work from home!"},
+      {"start": 12.5, "end": 18.0, "speaker": "agent", "text": "I completely understand how frustrating that is. Let me pull up your modem telemetry right away."},
+      {"start": 19.0, "end": 28.0, "speaker": "agent", "text": "I see an upstream noise lock on your node. I just pushed a signal reset to your router now."},
+      {"start": 29.0, "end": 40.0, "speaker": "customer", "text": "Hold on... the light just turned green and my connection is back up. Wow, that was actually fast."},
+      {"start": 41.0, "end": 50.0, "speaker": "agent", "text": "Great! The ping latency is back to normal. Is there anything else I can take care of for you?"},
+      {"start": 51.0, "end": 64.0, "speaker": "customer", "text": "No, that was everything. Thank you so much Alex, I really appreciate the quick fix. Have a great day."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.48,
+      "reason": "Agent reset the router signal resolving the outage; customer calmed down and expressed gratitude.",
+      "evidence": [{"quote": "I just pushed a signal reset to your router now.", "timestamp": 19.0}]
+    }
+  },
+  {
+    "call_id": "dev_02_polite_but_unresolved",
+    "simulated": true,
+    "hard_case_type": "polite_but_unresolved",
+    "duration_seconds": 70.0,
+    "segments": [
+      {"start": 0.0, "end": 3.5, "speaker": "agent", "text": "Customer Care, this is Sarah. How may I assist you?"},
+      {"start": 4.0, "end": 15.0, "speaker": "customer", "text": "Hello Sarah, good morning. I was wondering if I could please get an extension on my rebate coupon that expired yesterday?"},
+      {"start": 15.5, "end": 26.0, "speaker": "agent", "text": "Good morning! Let me check our promotion policy for that voucher code... I am so sorry, but the promotional system hard-locks expired coupons."},
+      {"start": 26.5, "end": 38.0, "speaker": "customer", "text": "Ah, I understand. I know it is not your fault at all Sarah, rules are rules. Thank you so much for checking for me anyway."},
+      {"start": 38.5, "end": 48.0, "speaker": "agent", "text": "I truly wish I could override it. Thank you for being so gracious and understanding."},
+      {"start": 49.0, "end": 68.0, "speaker": "customer", "text": "No worries at all, you have a wonderful afternoon. Bye-bye."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Customer politely requested coupon extension which company policy strictly prohibited.",
+      "evidence": [{"quote": "the promotional system hard-locks expired coupons.", "timestamp": 15.5}]
+    }
+  },
+  {
+    "call_id": "dev_03_resolved_still_angry",
+    "simulated": true,
+    "hard_case_type": "resolved_still_angry",
+    "duration_seconds": 80.0,
+    "segments": [
+      {"start": 0.0, "end": 4.0, "speaker": "agent", "text": "Billing support, my name is Mark. How can I assist you?"},
+      {"start": 4.5, "end": 18.0, "speaker": "customer", "text": "You charged me a bogus fifty dollar late fee on card 4532 0151 1283 0366! This is utter extortion!"},
+      {"start": 19.0, "end": 28.0, "speaker": "agent", "text": "I apologize for the confusion. Let me review your payment history right away."},
+      {"start": 29.0, "end": 42.0, "speaker": "agent", "text": "I see your payment cleared on the due date. I have reversed and refunded the fifty dollar fee to your account right now."},
+      {"start": 43.0, "end": 60.0, "speaker": "customer", "text": "Well you should never have stolen it in the first place! Your company always pulls this shady garbage, I am sick of having to call every single month!"},
+      {"start": 61.0, "end": 78.0, "speaker": "customer", "text": "Do not thank me for calling. I am still furious that your billing system is so broken. Goodbye."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.41,
+      "reason": "Late fee was refunded immediately, but customer remained furious about recurring billing errors.",
+      "evidence": [{"quote": "I have reversed and refunded the fifty dollar fee to your account right now.", "timestamp": 29.0}]
+    }
+  },
+  {
+    "call_id": "dev_04_sarcasm",
+    "simulated": true,
+    "hard_case_type": "sarcasm",
+    "duration_seconds": 55.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Hello, Tech Support, this is Dave."},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "Oh fantastic, another automated update that completely crashed my server. Just wonderful job by your engineering team."},
+      {"start": 14.5, "end": 22.0, "speaker": "agent", "text": "I am very sorry about that update crash. Which package version was applied?"},
+      {"start": 22.5, "end": 35.0, "speaker": "customer", "text": "Version 4.2. Truly a masterpiece of software design. Can you roll it back or do I stare at a brick all day?"},
+      {"start": 36.0, "end": 45.0, "speaker": "agent", "text": "Yes, I am executing the rollback command to version 4.1 now... and your instance is healthy again."},
+      {"start": 46.0, "end": 54.0, "speaker": "customer", "text": "Well miracles do happen. It is finally back. Don't push broken patches again."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.54,
+      "reason": "Customer used heavy sarcasm over server outage, which agent resolved by rolling back the software version.",
+      "evidence": [{"quote": "executing the rollback command to version 4.1 now... and your instance is healthy again.", "timestamp": 36.0}]
+    }
+  },
+  {
+    "call_id": "dev_05_interruptions",
+    "simulated": true,
+    "hard_case_type": "interruptions",
+    "duration_seconds": 60.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Global Logistics, Kevin speaking."},
+      {"start": 3.2, "end": 8.0, "speaker": "customer", "text": "Where is my package? The tracking has not moved in four days!"},
+      {"start": 8.2, "end": 11.0, "speaker": "agent", "text": "If you could provide your tracking—"},
+      {"start": 11.2, "end": 15.0, "speaker": "customer", "text": "I already typed it into the phone tree! Why do I have to repeat it?"},
+      {"start": 15.2, "end": 18.0, "speaker": "agent", "text": "The IVR did not forward—"},
+      {"start": 18.2, "end": 24.0, "speaker": "customer", "text": "Tracking number is 987654321! Check it!"},
+      {"start": 25.0, "end": 38.0, "speaker": "agent", "text": "Thank you. It cleared customs this morning and is out on the local delivery van right now for delivery by 3 PM."},
+      {"start": 39.0, "end": 58.0, "speaker": "customer", "text": "Okay. Fine. As long as it gets here today."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.36,
+      "reason": "Customer repeatedly interrupted agent before receiving confirmation package is on delivery truck today.",
+      "evidence": [{"quote": "out on the local delivery van right now for delivery by 3 PM.", "timestamp": 25.0}]
+    }
+  },
+  {
+    "call_id": "dev_06_thanks_no_fix",
+    "simulated": true,
+    "hard_case_type": "thanks_no_fix",
+    "duration_seconds": 45.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Premier Banking support, how can I help?"},
+      {"start": 3.5, "end": 10.0, "speaker": "customer", "text": "Can you waive my annual credit card fee this year?"},
+      {"start": 10.5, "end": 19.0, "speaker": "agent", "text": "I checked your account profile, but your tier is not eligible for fee waivers this cycle."},
+      {"start": 19.5, "end": 32.0, "speaker": "customer", "text": "Thanks for checking anyway, I appreciate your honesty. I guess I will cancel the card next week."},
+      {"start": 33.0, "end": 44.0, "speaker": "agent", "text": "Understood. Please let us know if there is anything else we can assist you with."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Customer thanked the agent for checking, but the fee waiver request was denied.",
+      "evidence": [{"quote": "your tier is not eligible for fee waivers this cycle.", "timestamp": 10.5}]
+    }
+  },
+  {
+    "call_id": "dev_07_escalation_to_supervisor",
+    "simulated": true,
+    "hard_case_type": "escalation_to_supervisor",
+    "duration_seconds": 72.0,
+    "segments": [
+      {"start": 0.0, "end": 4.0, "speaker": "agent", "text": "Account Services, Brian speaking. How may I help?"},
+      {"start": 4.5, "end": 14.0, "speaker": "customer", "text": "You cancelled my flight without sending me an email notification! I need to be rebooked immediately!"},
+      {"start": 15.0, "end": 26.0, "speaker": "agent", "text": "The next available flight is tomorrow evening, and there is a change fare of two hundred dollars."},
+      {"start": 27.0, "end": 40.0, "speaker": "customer", "text": "Are you out of your mind?! You cancelled my flight, I am not paying a dime! Escalate this to a supervisor right now!"},
+      {"start": 41.0, "end": 52.0, "speaker": "agent", "text": "I cannot waive the airline fee myself. Let me place you on hold and transfer you to a supervisor queue."},
+      {"start": 53.0, "end": 70.0, "speaker": "customer", "text": "Get them on the line immediately. This is outrageous."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent could not waive airline change fee, prompting angry customer to demand supervisor escalation.",
+      "evidence": [{"quote": "Escalate this to a supervisor right now!", "timestamp": 27.0}]
+    }
+  },
+  {
+    "call_id": "dev_08_rude_agent",
+    "simulated": true,
+    "hard_case_type": "rude_agent",
+    "duration_seconds": 50.0,
+    "segments": [
+      {"start": 0.0, "end": 2.0, "speaker": "agent", "text": "Yeah, what's your problem?"},
+      {"start": 2.5, "end": 11.0, "speaker": "customer", "text": "Excuse me? I was calling to check why my mobile data plan was throttled."},
+      {"start": 12.0, "end": 20.0, "speaker": "agent", "text": "Because you used all your gigabytes obviously. Read your contract."},
+      {"start": 21.0, "end": 32.0, "speaker": "customer", "text": "That is extremely rude and unprofessional. I have an unlimited plan!"},
+      {"start": 33.0, "end": 42.0, "speaker": "agent", "text": "Whatever. It slows down after 20 gigs. Nothing I can do."},
+      {"start": 43.0, "end": 49.0, "speaker": "customer", "text": "I am filing a formal complaint against you."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": false,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent was dismissive and disrespectful toward customer question regarding data throttling.",
+      "evidence": [{"quote": "Because you used all your gigabytes obviously. Read your contract.", "timestamp": 12.0}]
+    }
+  },
+  {
+    "call_id": "dev_09_smooth_order_tracking",
+    "simulated": true,
+    "hard_case_type": "standard_resolution",
+    "duration_seconds": 40.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Thanks for calling QuickMart, this is Elena."},
+      {"start": 3.5, "end": 9.0, "speaker": "customer", "text": "Hi Elena, just wanted to check if order 123456 has shipped?"},
+      {"start": 9.5, "end": 18.0, "speaker": "agent", "text": "Let me see... yes, it shipped this morning via FedEx tracking 5550192834."},
+      {"start": 19.0, "end": 28.0, "speaker": "customer", "text": "Wonderful, that is all I needed. Thank you so much for the quick help!"},
+      {"start": 29.0, "end": 38.0, "speaker": "agent", "text": "You are very welcome! Have a wonderful day."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.1,
+      "reason": "Agent promptly provided tracking details for customer order.",
+      "evidence": [{"quote": "yes, it shipped this morning via FedEx tracking 5550192834.", "timestamp": 9.5}]
+    }
+  },
+  {
+    "call_id": "dev_10_unclear_connection_drop",
+    "simulated": true,
+    "hard_case_type": "call_dropped_unclear",
+    "duration_seconds": 30.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Metro Power emergency dispatch, officer Higgins."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi, there is a sparking line near Elm Street, wait can you hear me? The signal is—"},
+      {"start": 13.0, "end": 18.0, "speaker": "agent", "text": "Hello? Caller, which cross street on Elm?"},
+      {"start": 19.0, "end": 25.0, "speaker": "customer", "text": "Near the... [static] ...hello? Can you hear—"},
+      {"start": 26.0, "end": 29.0, "speaker": "agent", "text": "Call disconnected."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unclear",
+      "resolution_time_minutes": null,
+      "reason": "Call disconnected abruptly due to static before the incident location could be confirmed.",
+      "evidence": [{"quote": "Call disconnected.", "timestamp": 26.0}]
+    }
+  },
+  {
+    "call_id": "dev_11_password_reset_success",
+    "simulated": true,
+    "hard_case_type": "routine_fix",
+    "duration_seconds": 55.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "IT Helpdesk, Jordan speaking."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi, I locked myself out of the intranet portal again."},
+      {"start": 13.0, "end": 22.0, "speaker": "agent", "text": "No problem Jordan, I have reset your account password and sent a temporary link to your registered email."},
+      {"start": 23.0, "end": 34.0, "speaker": "customer", "text": "Got the email and I am logged in now. Perfect, thanks!"},
+      {"start": 35.0, "end": 45.0, "speaker": "agent", "text": "Glad to assist, enjoy your day."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.16,
+      "reason": "Agent reset portal access and customer successfully logged in.",
+      "evidence": [{"quote": "I have reset your account password and sent a temporary link", "timestamp": 13.0}]
+    }
+  },
+  {
+    "call_id": "dev_12_warranty_claim_rejected",
+    "simulated": true,
+    "hard_case_type": "dispute_unresolved",
+    "duration_seconds": 65.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Appliance Warranty, this is Chloe."},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "My blender motor started smoking after two months and I want a replacement unit under warranty."},
+      {"start": 15.0, "end": 28.0, "speaker": "agent", "text": "Looking at your serial number, water ingress damage is explicitly excluded from warranty coverage."},
+      {"start": 29.0, "end": 45.0, "speaker": "customer", "text": "It is a kitchen appliance, how can water exclude warranty?! That makes zero sense, you guys are scammers!"},
+      {"start": 46.0, "end": 58.0, "speaker": "agent", "text": "I apologize, but that is the manufacturer term. I cannot authorize a free replacement."},
+      {"start": 59.0, "end": 64.0, "speaker": "customer", "text": "I will make sure everyone knows never to buy your junk."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Warranty claim denied due to water ingress exclusion, angering customer.",
+      "evidence": [{"quote": "I cannot authorize a free replacement.", "timestamp": 46.0}]
+    }
+  },
+  {
+    "call_id": "dev_13_subscription_cancellation_smooth",
+    "simulated": true,
+    "hard_case_type": "routine_cancellation",
+    "duration_seconds": 48.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "StreamPlus billing, how can I assist?"},
+      {"start": 3.5, "end": 10.0, "speaker": "customer", "text": "Hi, I would like to cancel my streaming subscription please."},
+      {"start": 11.0, "end": 22.0, "speaker": "agent", "text": "I can take care of that for you right now. Your auto-renewal is cancelled and access ends at the billing cycle."},
+      {"start": 23.0, "end": 32.0, "speaker": "customer", "text": "Thank you, that was very simple and hassle-free."},
+      {"start": 33.0, "end": 42.0, "speaker": "agent", "text": "You are welcome. We hope to see you back in the future."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.13,
+      "reason": "Agent cleanly processed subscription cancellation without friction.",
+      "evidence": [{"quote": "I can take care of that for you right now. Your auto-renewal is cancelled", "timestamp": 11.0}]
+    }
+  },
+  {
+    "call_id": "dev_14_damaged_goods_replacement",
+    "simulated": true,
+    "hard_case_type": "customer_calms_down",
+    "duration_seconds": 62.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Glassware Direct, support team."},
+      {"start": 3.5, "end": 15.0, "speaker": "customer", "text": "My package arrived with shattered champagne flutes! Glass is everywhere, this is unacceptable!"},
+      {"start": 16.0, "end": 26.0, "speaker": "agent", "text": "Oh no, I am so sorry to hear that. Please be careful with the shards. I am dispatching a complimentary replacement set via priority shipping right now."},
+      {"start": 27.0, "end": 38.0, "speaker": "customer", "text": "Oh... really? Without me having to ship back broken glass?"},
+      {"start": 39.0, "end": 48.0, "speaker": "agent", "text": "Yes, absolutely. You do not need to return damaged glass. The tracking number is already sent to your email."},
+      {"start": 49.0, "end": 60.0, "speaker": "customer", "text": "That is wonderful customer service. Thank you so much for fixing it immediately."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.21,
+      "reason": "Agent replaced shattered order immediately with expedited shipping and no return hassle.",
+      "evidence": [{"quote": "I am dispatching a complimentary replacement set via priority shipping right now.", "timestamp": 16.0}]
+    }
+  },
+  {
+    "call_id": "dev_15_wrong_department",
+    "simulated": true,
+    "hard_case_type": "transfer_unresolved",
+    "duration_seconds": 38.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Personal Loans department, Eric speaking."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi, I have a question about my commercial mortgage refinance rate."},
+      {"start": 13.0, "end": 22.0, "speaker": "agent", "text": "Ah, you have reached personal consumer loans. I will need to transfer you to our commercial lending team."},
+      {"start": 23.0, "end": 32.0, "speaker": "customer", "text": "Okay, please transfer me over."},
+      {"start": 33.0, "end": 37.0, "speaker": "agent", "text": "Transferring now."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Caller reached wrong department and had to be transferred.",
+      "evidence": [{"quote": "I will need to transfer you to our commercial lending team.", "timestamp": 13.0}]
+    }
+  },
+  {
+    "call_id": "dev_16_disputed_charge_investigation",
+    "simulated": true,
+    "hard_case_type": "in_progress_unclear",
+    "duration_seconds": 58.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Fraud prevention desk, Officer Vance."},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "I see an unfamiliar transaction for four hundred dollars from an overseas merchant on my card."},
+      {"start": 15.0, "end": 28.0, "speaker": "agent", "text": "I have frozen the card to prevent further charges and opened a formal investigation claim #789123."},
+      {"start": 29.0, "end": 44.0, "speaker": "customer", "text": "Will I get my money back today or what?"},
+      {"start": 45.0, "end": 56.0, "speaker": "agent", "text": "The fraud review takes up to five business days. We will notify you once the investigation concludes."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unclear",
+      "resolution_time_minutes": null,
+      "reason": "Card frozen and claim opened, but refund decision is pending a 5-day fraud review.",
+      "evidence": [{"quote": "The fraud review takes up to five business days.", "timestamp": 45.0}]
+    }
+  },
+  {
+    "call_id": "dev_17_address_update_speedy",
+    "simulated": true,
+    "hard_case_type": "routine_fix",
+    "duration_seconds": 36.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Member Services, this is Lisa."},
+      {"start": 3.5, "end": 10.0, "speaker": "customer", "text": "Hi Lisa, I just moved and need to update my mailing address."},
+      {"start": 11.0, "end": 20.0, "speaker": "agent", "text": "Sure thing! What is the new address?... Got it, your address is updated across all accounts."},
+      {"start": 21.0, "end": 29.0, "speaker": "customer", "text": "That was super quick! Thank you so much."},
+      {"start": 30.0, "end": 35.0, "speaker": "agent", "text": "My pleasure, have a wonderful moving day!"}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.13,
+      "reason": "Agent updated member mailing address smoothly.",
+      "evidence": [{"quote": "your address is updated across all accounts.", "timestamp": 11.0}]
+    }
+  },
+  {
+    "call_id": "dev_18_system_outage_helpless",
+    "simulated": true,
+    "hard_case_type": "unresolved_outage",
+    "duration_seconds": 45.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Cloud Database support, Sam speaking."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Our production database cluster is completely unresponsive! Can you restart it?"},
+      {"start": 13.0, "end": 24.0, "speaker": "agent", "text": "Unfortunately our internal management console is currently down due to an active regional outage. Nothing I can do until engineering recovers the control plane."},
+      {"start": 25.0, "end": 37.0, "speaker": "customer", "text": "We are losing thousands of dollars every minute! This is a disaster!"},
+      {"start": 38.0, "end": 44.0, "speaker": "agent", "text": "I understand and apologize, but our entire team is blocked right now."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Internal management console was down during regional outage, preventing any immediate remediation.",
+      "evidence": [{"quote": "Nothing I can do until engineering recovers the control plane.", "timestamp": 13.0}]
+    }
+  },
+  {
+    "call_id": "dev_19_polite_cancel_flight",
+    "simulated": true,
+    "hard_case_type": "polite_but_unresolved",
+    "duration_seconds": 52.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Skyline Airways, how may I help you?"},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "Hello, I booked a non-refundable economy ticket for tomorrow, but my doctor advised against traveling."},
+      {"start": 15.0, "end": 28.0, "speaker": "agent", "text": "I am so sorry to hear about your health. Basic economy fares do not permit cash refunds under airline tariff rules, though I can offer travel credit minus a fifty dollar fee."},
+      {"start": 29.0, "end": 41.0, "speaker": "customer", "text": "I understand policies are strict. I won't be able to travel within the year so the credit won't help, but thank you for your kind tone anyway."},
+      {"start": 42.0, "end": 50.0, "speaker": "agent", "text": "I truly wish you a speedy recovery. Take care."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Customer politely requested non-refundable ticket exception which policy prohibited.",
+      "evidence": [{"quote": "Basic economy fares do not permit cash refunds under airline tariff rules", "timestamp": 15.0}]
+    }
+  },
+  {
+    "call_id": "dev_20_satisfied_from_start",
+    "simulated": true,
+    "hard_case_type": "satisfied_throughout",
+    "duration_seconds": 35.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "SolarTech Loyalty desk, Maria speaking."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi Maria! I love your solar panel system, it cut our electric bill in half! Just calling to redeem my reward points for a smart thermostat."},
+      {"start": 13.0, "end": 22.0, "speaker": "agent", "text": "That is so wonderful to hear! I just processed the thermostat reward redemption; it will ship out tomorrow morning."},
+      {"start": 23.0, "end": 30.0, "speaker": "customer", "text": "Awesome! You guys are the best. Thank you Maria!"},
+      {"start": 31.0, "end": 34.0, "speaker": "agent", "text": "Thank you for being our loyal customer!"}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "satisfied",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.16,
+      "reason": "Enthusiastic customer successfully redeemed loyalty points for a smart thermostat.",
+      "evidence": [{"quote": "I just processed the thermostat reward redemption; it will ship out tomorrow morning.", "timestamp": 13.0}]
+    }
+  }
+]

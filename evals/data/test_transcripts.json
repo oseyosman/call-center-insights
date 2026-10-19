@@ -1,0 +1,455 @@
+[
+  {
+    "call_id": "test_01_customer_calms_down",
+    "simulated": true,
+    "hard_case_type": "customer_calms_down",
+    "duration_seconds": 68.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "National Cable and Broadband, my name is Rachel. How can I help?"},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "I am so mad right now! Your technician missed the installation appointment for the second time today without any notice!"},
+      {"start": 14.5, "end": 22.0, "speaker": "agent", "text": "I am genuinely sorry for that unacceptable delay. Let me check the field dispatch board immediately."},
+      {"start": 23.0, "end": 33.0, "speaker": "agent", "text": "The tech was stuck on an emergency line down, but I have rerouted a senior lead technician who is five minutes away, and applied a fifty dollar inconvenience credit to your bill."},
+      {"start": 34.0, "end": 44.0, "speaker": "customer", "text": "Wait, really? He is five minutes away? Okay... I appreciate you stepping up and sorting this out."},
+      {"start": 45.0, "end": 54.0, "speaker": "agent", "text": "He just pulled into your driveway. I see him on GPS. Anything else I can assist with?"},
+      {"start": 55.0, "end": 66.0, "speaker": "customer", "text": "No, that is great news. Thank you for fixing this promptly Rachel. Have a good afternoon."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.32,
+      "reason": "Agent dispatched immediate lead tech and applied billing credit, turning an angry customer into a satisfied one.",
+      "evidence": [{"quote": "rerouted a senior lead technician who is five minutes away, and applied a fifty dollar inconvenience credit", "timestamp": 23.0}]
+    }
+  },
+  {
+    "call_id": "test_02_polite_but_unresolved",
+    "simulated": true,
+    "hard_case_type": "polite_but_unresolved",
+    "duration_seconds": 54.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Urban Apparel Returns, this is Marcus."},
+      {"start": 3.5, "end": 13.0, "speaker": "customer", "text": "Good afternoon Marcus. I was hoping to return a winter jacket, but the 30-day return window passed two weeks ago."},
+      {"start": 14.0, "end": 24.0, "speaker": "agent", "text": "Hello there! Let me review the return authorization system... unfortunately, beyond 30 days the warehouse scanner rejects all return labels."},
+      {"start": 25.0, "end": 36.0, "speaker": "customer", "text": "I completely understand Marcus. I should have tried it on earlier, that is on me. Thank you so much for looking into it for me."},
+      {"start": 37.0, "end": 44.0, "speaker": "agent", "text": "Thank you for understanding our policy. Have a lovely day ahead."},
+      {"start": 45.0, "end": 52.0, "speaker": "customer", "text": "You too, bye-bye."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Customer politely requested late return which was blocked by warehouse policy.",
+      "evidence": [{"quote": "beyond 30 days the warehouse scanner rejects all return labels.", "timestamp": 14.0}]
+    }
+  },
+  {
+    "call_id": "test_03_resolved_still_angry",
+    "simulated": true,
+    "hard_case_type": "resolved_still_angry",
+    "duration_seconds": 75.0,
+    "segments": [
+      {"start": 0.0, "end": 4.0, "speaker": "agent", "text": "PowerGrid Utility billing, officer Hernandez."},
+      {"start": 4.5, "end": 16.0, "speaker": "customer", "text": "You cut off my electricity yesterday even though my auto-pay is set up! My whole refrigerator of food spoiled!"},
+      {"start": 17.0, "end": 26.0, "speaker": "agent", "text": "I am looking into this right now... our automated batch payment system had a glitch on Tuesday. I am remotely restoring power this second."},
+      {"start": 27.0, "end": 38.0, "speaker": "customer", "text": "The power is back, but who is going to pay for three hundred dollars of spoiled meat and dairy?!"},
+      {"start": 39.0, "end": 49.0, "speaker": "agent", "text": "I have credited two hundred and fifty dollars in emergency utility credits to compensate for the disruption."},
+      {"start": 50.0, "end": 72.0, "speaker": "customer", "text": "That barely covers it! Your incompetence ruined my family's dinner. I am still furious that this happened and will be taking this up with the state utility board!"}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.21,
+      "reason": "Power was restored and utility credit issued, but customer remained furious over spoiled food.",
+      "evidence": [{"quote": "I am remotely restoring power this second.", "timestamp": 17.0}]
+    }
+  },
+  {
+    "call_id": "test_04_sarcasm",
+    "simulated": true,
+    "hard_case_type": "sarcasm",
+    "duration_seconds": 58.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "CloudDrive support, this is Leo."},
+      {"start": 3.5, "end": 15.0, "speaker": "customer", "text": "Oh splendid, you guys just wiped my photo sync folder. Outstanding cloud architecture, truly state of the art."},
+      {"start": 16.0, "end": 24.0, "speaker": "agent", "text": "I am so sorry to hear that. Did the folder delete locally or from the web portal?"},
+      {"start": 25.0, "end": 35.0, "speaker": "customer", "text": "Both. Empty as a desert. I love paying fifty bucks a month for files to vanish into thin air."},
+      {"start": 36.0, "end": 46.0, "speaker": "agent", "text": "I checked our server snapshot versioning. I have restored all forty-two hundred items from the 4 AM snapshot right now."},
+      {"start": 47.0, "end": 56.0, "speaker": "customer", "text": "Well what do you know, they reappeared. Next time try not scaring people to death with your updates."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.54,
+      "reason": "Customer used sarcastic remarks about data loss, which agent resolved by restoring cloud snapshot.",
+      "evidence": [{"quote": "I have restored all forty-two hundred items from the 4 AM snapshot right now.", "timestamp": 36.0}]
+    }
+  },
+  {
+    "call_id": "test_05_interruptions",
+    "simulated": true,
+    "hard_case_type": "interruptions",
+    "duration_seconds": 64.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Swift Airlines Reservation desk."},
+      {"start": 3.2, "end": 8.0, "speaker": "customer", "text": "My flight was delayed four hours! I will miss my connecting cruise!"},
+      {"start": 8.2, "end": 12.0, "speaker": "agent", "text": "Let me see if there is an earlier—"},
+      {"start": 12.2, "end": 16.0, "speaker": "customer", "text": "I don't care about excuses, I need a flight that leaves by noon!"},
+      {"start": 16.2, "end": 19.0, "speaker": "agent", "text": "Looking at partner airlines—"},
+      {"start": 19.2, "end": 24.0, "speaker": "customer", "text": "Book me on Delta or United, whatever it takes!"},
+      {"start": 25.0, "end": 38.0, "speaker": "agent", "text": "I have confirmed and booked you on the 11:15 AM non-stop on United, gate B12. Your boarding pass is in your inbox."},
+      {"start": 39.0, "end": 62.0, "speaker": "customer", "text": "Oh. Wow, okay. That works. Thanks."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.36,
+      "reason": "Customer repeatedly interrupted agent before being successfully rebooked on partner airline.",
+      "evidence": [{"quote": "I have confirmed and booked you on the 11:15 AM non-stop on United", "timestamp": 25.0}]
+    }
+  },
+  {
+    "call_id": "test_06_thanks_no_fix",
+    "simulated": true,
+    "hard_case_type": "thanks_no_fix",
+    "duration_seconds": 44.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Auto Insure claims desk, my name is Tina."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi Tina, can I file a comprehensive claim for cosmetic rock chips on my front bumper?"},
+      {"start": 13.0, "end": 23.0, "speaker": "agent", "text": "Rock chips under one inch are classified as normal road wear and tear, which is not covered under the comprehensive policy terms."},
+      {"start": 24.0, "end": 34.0, "speaker": "customer", "text": "Thanks for explaining that clearly Tina, I appreciate you saving me the hassle of paperwork. Have a good one."},
+      {"start": 35.0, "end": 42.0, "speaker": "agent", "text": "You are very welcome! Drive safely."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Customer thanked the agent for explanation, but the insurance claim was not covered.",
+      "evidence": [{"quote": "normal road wear and tear, which is not covered under the comprehensive policy terms.", "timestamp": 13.0}]
+    }
+  },
+  {
+    "call_id": "test_07_escalation_to_supervisor",
+    "simulated": true,
+    "hard_case_type": "escalation_to_supervisor",
+    "duration_seconds": 66.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Rental Car customer relations, agent Todd."},
+      {"start": 3.5, "end": 13.0, "speaker": "customer", "text": "You charged me a three hundred dollar cleaning fee for dog hair when I don't even own a dog!"},
+      {"start": 14.0, "end": 24.0, "speaker": "agent", "text": "The return branch uploaded inspection photos showing pet hair in the backseat. I cannot remove branch-level fees."},
+      {"start": 25.0, "end": 38.0, "speaker": "customer", "text": "You are lying or looking at the wrong vehicle! Transfer me to your supervisor right this second!"},
+      {"start": 39.0, "end": 49.0, "speaker": "agent", "text": "Please hold while I connect you to the supervisor escalation department."},
+      {"start": 50.0, "end": 64.0, "speaker": "customer", "text": "I will wait, and your manager better fix this."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "angry",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent refused to waive branch cleaning fee, prompting customer to demand supervisor escalation.",
+      "evidence": [{"quote": "Transfer me to your supervisor right this second!", "timestamp": 25.0}]
+    }
+  },
+  {
+    "call_id": "test_08_rude_agent",
+    "simulated": true,
+    "hard_case_type": "rude_agent",
+    "duration_seconds": 45.0,
+    "segments": [
+      {"start": 0.0, "end": 2.0, "speaker": "agent", "text": "Hurry up, I have a long queue."},
+      {"start": 2.5, "end": 10.0, "speaker": "customer", "text": "Pardon? I just wanted to know if my deposit has cleared."},
+      {"start": 11.0, "end": 18.0, "speaker": "agent", "text": "I don't care about your deposit. Check your mobile app instead of wasting my time."},
+      {"start": 19.0, "end": 28.0, "speaker": "customer", "text": "How dare you speak to me like that! What is your employee badge number?"},
+      {"start": 29.0, "end": 36.0, "speaker": "agent", "text": "Whatever, figure it out yourself."},
+      {"start": 37.0, "end": 43.0, "speaker": "customer", "text": "I am speaking to corporate executive relations about you!"}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": false,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Agent was hostile, telling customer to hurry up and refusing assistance.",
+      "evidence": [{"quote": "Hurry up, I have a long queue.", "timestamp": 0.0}]
+    }
+  },
+  {
+    "call_id": "test_09_standard_refund_issued",
+    "simulated": true,
+    "hard_case_type": "routine_fix",
+    "duration_seconds": 42.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "BookStore Online, Samantha speaking."},
+      {"start": 3.5, "end": 10.0, "speaker": "customer", "text": "Hi Samantha, I was charged twice for order 654321."},
+      {"start": 11.0, "end": 21.0, "speaker": "agent", "text": "I see the duplicate payment capture. I have voided the second charge and processed an immediate refund to your card."},
+      {"start": 22.0, "end": 30.0, "speaker": "customer", "text": "I just received the refund email confirmation. Thank you so much!"},
+      {"start": 31.0, "end": 40.0, "speaker": "agent", "text": "Happy to help! Have a wonderful day."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.13,
+      "reason": "Agent voided duplicate payment and refunded customer immediately.",
+      "evidence": [{"quote": "I have voided the second charge and processed an immediate refund to your card.", "timestamp": 11.0}]
+    }
+  },
+  {
+    "call_id": "test_10_call_dropped_unclear",
+    "simulated": true,
+    "hard_case_type": "call_dropped_unclear",
+    "duration_seconds": 25.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Roadside assistance, dispatch desk."},
+      {"start": 3.5, "end": 11.0, "speaker": "customer", "text": "Help, my tire blew out on highway 101 near mile marker... wait can you hear me?"},
+      {"start": 12.0, "end": 18.0, "speaker": "agent", "text": "Caller, which mile marker on 101?"},
+      {"start": 19.0, "end": 24.0, "speaker": "agent", "text": "The line has dropped."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "upset",
+      "agent_handled_well": true,
+      "resolution": "unclear",
+      "resolution_time_minutes": null,
+      "reason": "Roadside emergency call dropped before mile marker or vehicle location could be confirmed.",
+      "evidence": [{"quote": "The line has dropped.", "timestamp": 19.0}]
+    }
+  },
+  {
+    "call_id": "test_11_sim_card_activation",
+    "simulated": true,
+    "hard_case_type": "routine_fix",
+    "duration_seconds": 45.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Cellular Network support, Greg here."},
+      {"start": 3.5, "end": 11.0, "speaker": "customer", "text": "Hi Greg, I got my new SIM card in the mail and need help activating it."},
+      {"start": 12.0, "end": 22.0, "speaker": "agent", "text": "I can activate that for you right now. I just provisioned the ICCID on our network; please restart your phone."},
+      {"start": 23.0, "end": 33.0, "speaker": "customer", "text": "Restarted and 5G signal bars popped up right away! Thank you so much Greg!"},
+      {"start": 34.0, "end": 43.0, "speaker": "agent", "text": "You are all set! Welcome to our network."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.14,
+      "reason": "Agent activated new SIM card and customer verified cellular network connection.",
+      "evidence": [{"quote": "I just provisioned the ICCID on our network", "timestamp": 12.0}]
+    }
+  },
+  {
+    "call_id": "test_12_denied_medical_authorization",
+    "simulated": true,
+    "hard_case_type": "dispute_unresolved",
+    "duration_seconds": 65.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Health Benefits Authorization, agent Frank."},
+      {"start": 3.5, "end": 13.0, "speaker": "customer", "text": "Why was my specialist MRI prior-authorization denied? My doctor said it was urgent!"},
+      {"start": 14.0, "end": 26.0, "speaker": "agent", "text": "The medical review committee flagged that step therapy physical therapy notes were missing from the file."},
+      {"start": 27.0, "end": 42.0, "speaker": "customer", "text": "I cannot walk without excruciating pain and you want physical therapy?! You people are heartless bureaucrats!"},
+      {"start": 43.0, "end": 52.0, "speaker": "agent", "text": "I understand your frustration, but without the therapy records I cannot approve the MRI."},
+      {"start": 53.0, "end": 63.0, "speaker": "customer", "text": "I am appealing this to the state health commissioner."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "angry",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Prior authorization denied due to missing step therapy clinical notes.",
+      "evidence": [{"quote": "without the therapy records I cannot approve the MRI.", "timestamp": 43.0}]
+    }
+  },
+  {
+    "call_id": "test_13_gym_membership_freeze",
+    "simulated": true,
+    "hard_case_type": "routine_fix",
+    "duration_seconds": 40.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "FitLife Clubs member desk, Zoe speaking."},
+      {"start": 3.5, "end": 10.0, "speaker": "customer", "text": "Hi Zoe, I am traveling for two months and need to freeze my gym membership."},
+      {"start": 11.0, "end": 20.0, "speaker": "agent", "text": "I have put a two-month administrative freeze on your account starting today. Zero billing until December."},
+      {"start": 21.0, "end": 29.0, "speaker": "customer", "text": "Awesome, that was very smooth. Thank you Zoe!"},
+      {"start": 30.0, "end": 38.0, "speaker": "agent", "text": "Safe travels, see you in December!"}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.13,
+      "reason": "Agent placed a two-month freeze on gym membership.",
+      "evidence": [{"quote": "I have put a two-month administrative freeze on your account starting today.", "timestamp": 11.0}]
+    }
+  },
+  {
+    "call_id": "test_14_lost_wallet_card_freeze",
+    "simulated": true,
+    "hard_case_type": "customer_calms_down",
+    "duration_seconds": 58.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "TrustBank Security hotline, agent Kyle."},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "Help! I just lost my wallet at the airport and my debit card is in it! Someone is going to steal my savings!"},
+      {"start": 15.0, "end": 24.0, "speaker": "agent", "text": "Take a deep breath, I have locked and frozen your debit card right now. No transactions can go through."},
+      {"start": 25.0, "end": 35.0, "speaker": "customer", "text": "Oh thank goodness... did anyone try to use it yet?"},
+      {"start": 36.0, "end": 45.0, "speaker": "agent", "text": "Zero attempted charges. I also dispatched a rush replacement card to your hotel with overnight delivery."},
+      {"start": 46.0, "end": 56.0, "speaker": "customer", "text": "You are a lifesaver Kyle. I was panicking so much. Thank you from the bottom of my heart."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.19,
+      "reason": "Agent immediately froze lost debit card and arranged overnight replacement to hotel.",
+      "evidence": [{"quote": "I have locked and frozen your debit card right now.", "timestamp": 15.0}]
+    }
+  },
+  {
+    "call_id": "test_15_wrong_number_transfer",
+    "simulated": true,
+    "hard_case_type": "transfer_unresolved",
+    "duration_seconds": 32.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Apex Hardware customer service."},
+      {"start": 3.5, "end": 10.0, "speaker": "customer", "text": "Hi, I am calling about a prescription refill at the pharmacy counter."},
+      {"start": 11.0, "end": 19.0, "speaker": "agent", "text": "You have reached Apex Hardware tools, not Apex Pharmacy. I will transfer your call to the pharmacy line."},
+      {"start": 20.0, "end": 26.0, "speaker": "customer", "text": "Oh silly me, thank you for transferring."},
+      {"start": 27.0, "end": 30.0, "speaker": "agent", "text": "Connecting you now."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Customer dialed hardware store instead of pharmacy; transferred without resolution.",
+      "evidence": [{"quote": "I will transfer your call to the pharmacy line.", "timestamp": 11.0}]
+    }
+  },
+  {
+    "call_id": "test_16_pending_loan_underwriting",
+    "simulated": true,
+    "hard_case_type": "in_progress_unclear",
+    "duration_seconds": 50.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Home Mortgage Lending, this is Scott."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi Scott, has my loan application been approved yet? Closing date is in two weeks."},
+      {"start": 13.0, "end": 24.0, "speaker": "agent", "text": "The underwriter requested one additional tax schedule, which our system received yesterday. It is currently in the secondary review queue."},
+      {"start": 25.0, "end": 36.0, "speaker": "customer", "text": "Does that mean it will be approved in time?"},
+      {"start": 37.0, "end": 48.0, "speaker": "agent", "text": "It is in progress; underwriters take 48 to 72 hours. We cannot guarantee the outcome until the review finishes."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "neutral",
+      "agent_handled_well": true,
+      "resolution": "unclear",
+      "resolution_time_minutes": null,
+      "reason": "Loan underwriting is actively in progress; outcome cannot be confirmed yet.",
+      "evidence": [{"quote": "We cannot guarantee the outcome until the review finishes.", "timestamp": 37.0}]
+    }
+  },
+  {
+    "call_id": "test_17_wifi_extender_setup",
+    "simulated": true,
+    "hard_case_type": "routine_fix",
+    "duration_seconds": 52.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "NetGear Tech Assistance, Andy here."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi Andy, my wifi extender keeps flashing amber instead of solid green."},
+      {"start": 13.0, "end": 24.0, "speaker": "agent", "text": "Hold the WPS button on your router for five seconds, then press the pair button on the extender."},
+      {"start": 25.0, "end": 37.0, "speaker": "customer", "text": "Doing that now... hey, it turned solid green and full speed internet connected in my backyard!"},
+      {"start": 38.0, "end": 45.0, "speaker": "agent", "text": "That is what we like to hear! Problem solved."},
+      {"start": 46.0, "end": 50.0, "speaker": "customer", "text": "Thank you Andy, you made my day!"}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.2,
+      "reason": "Agent guided customer through WPS pairing, resolving flashing amber extender error.",
+      "evidence": [{"quote": "it turned solid green and full speed internet connected", "timestamp": 25.0}]
+    }
+  },
+  {
+    "call_id": "test_18_discontinued_product_parts",
+    "simulated": true,
+    "hard_case_type": "unresolved_outage",
+    "duration_seconds": 46.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "LawnCare Replacement Parts, agent Keith."},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "I need a replacement carburetor diaphragm for mower model Pro-98."},
+      {"start": 13.0, "end": 24.0, "speaker": "agent", "text": "I checked our warehouse database. Model Pro-98 was discontinued eight years ago and parts manufacturing has ceased."},
+      {"start": 25.0, "end": 35.0, "speaker": "customer", "text": "So you are saying my three thousand dollar commercial mower is garbage now?"},
+      {"start": 36.0, "end": 44.0, "speaker": "agent", "text": "I am afraid OEM parts are no longer available anywhere in our supply chain."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "neutral",
+      "customer_sentiment_end": "upset",
+      "agent_handled_well": true,
+      "resolution": "unresolved",
+      "resolution_time_minutes": null,
+      "reason": "Mower parts discontinued and no longer manufactured.",
+      "evidence": [{"quote": "OEM parts are no longer available anywhere in our supply chain.", "timestamp": 36.0}]
+    }
+  },
+  {
+    "call_id": "test_19_airline_baggage_delayed",
+    "simulated": true,
+    "hard_case_type": "customer_calms_down",
+    "duration_seconds": 60.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "Airport Baggage Services, agent Wendy."},
+      {"start": 3.5, "end": 14.0, "speaker": "customer", "text": "My luggage never showed up on the carousel! I have business meetings tomorrow and no suits!"},
+      {"start": 15.0, "end": 26.0, "speaker": "agent", "text": "I scanned your bag tag #554433. It was put on the direct flight right behind yours and lands in 45 minutes."},
+      {"start": 27.0, "end": 38.0, "speaker": "agent", "text": "Our courier will deliver it directly to your hotel room tonight by 9 PM, free of charge."},
+      {"start": 39.0, "end": 49.0, "speaker": "customer", "text": "Oh, that is such a huge relief! I was terrified it was lost in Europe. Thank you so much Wendy."},
+      {"start": 50.0, "end": 58.0, "speaker": "agent", "text": "Rest easy, we will take care of getting it to your room."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "upset",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.23,
+      "reason": "Agent tracked delayed bag on next flight and scheduled courier hotel delivery.",
+      "evidence": [{"quote": "Our courier will deliver it directly to your hotel room tonight by 9 PM, free of charge.", "timestamp": 27.0}]
+    }
+  },
+  {
+    "call_id": "test_20_satisfied_throughout",
+    "simulated": true,
+    "hard_case_type": "satisfied_throughout",
+    "duration_seconds": 36.0,
+    "segments": [
+      {"start": 0.0, "end": 3.0, "speaker": "agent", "text": "PetBox Concierge, how can I help?"},
+      {"start": 3.5, "end": 12.0, "speaker": "customer", "text": "Hi! My golden retriever loved the duck chew toys in this month's box! Can I add extra chew toys to my recurring subscription?"},
+      {"start": 13.0, "end": 21.0, "speaker": "agent", "text": "That is adorable! I added the double-toy add-on to your recurring monthly delivery profile starting next box."},
+      {"start": 22.0, "end": 29.0, "speaker": "customer", "text": "Fantastic! He will be so excited. Thank you so much!"},
+      {"start": 30.0, "end": 35.0, "speaker": "agent", "text": "Give your dog a pet from us! Have a wonderful day."}
+    ],
+    "ground_truth": {
+      "customer_sentiment_start": "satisfied",
+      "customer_sentiment_end": "satisfied",
+      "agent_handled_well": true,
+      "resolution": "resolved",
+      "resolution_time_minutes": 0.16,
+      "reason": "Customer happily added extra pet toys to subscription profile.",
+      "evidence": [{"quote": "I added the double-toy add-on to your recurring monthly delivery profile", "timestamp": 13.0}]
+    }
+  }
+]
